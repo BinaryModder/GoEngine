@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/BinaryModder/GoEngine/engine"
+	"goengine/engine"
 
 	"github.com/AllenDang/giu"
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -11,6 +11,8 @@ import (
 )
 
 var (
+	isInitialized bool
+
 	myShader *engine.Shader
 	vao      uint32
 	vbo      uint32
@@ -34,7 +36,50 @@ var cubeVertices = []float32{
 	0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5,
 }
 
+func initEngine() {
+	if err := gl.Init(); err != nil {
+		log.Fatalln("Не удалось инициализировать OpenGL:", err)
+	}
+
+	gl.Enable(gl.DEPTH_TEST)
+
+	var err error
+	myShader, err = engine.NewShader(`#version 410 core
+		layout(location = 0) in vec3 position;
+		uniform mat4 mvp;
+		void main() {
+			gl_Position = mvp * vec4(position, 1.0);
+		}
+	`, `#version 410 core
+		out vec4 color;
+		void main() {
+			color = vec4(0.8, 0.3, 0.2, 1.0);
+		}
+	`)
+	if err != nil {
+		log.Fatalln("Ошибка компиляции шейдеров:", err)
+	}
+
+	gl.GenVertexArrays(1, &vao)
+	gl.GenBuffers(1, &vbo)
+
+	gl.BindVertexArray(vao)
+	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
+	//gl.BufferData(gl.ARRAY_BUFFER, len(cubeVertices)*4, gl.Ptr(cubeVertices), gl.STATIC_DRAW)
+
+	gl.VertexAttribPointerWithOffset(0, 3, gl.FLOAT, false, 0, 0)
+	gl.EnableVertexAttribArray(0)
+
+	projMatrix = mgl32.Perspective(mgl32.DegToRad(45.0), 1024.0/768.0, 0.1, 100.0)
+	viewMatrix = mgl32.LookAtV(mgl32.Vec3{2, 2, 3}, mgl32.Vec3{0, 0, 0}, mgl32.Vec3{0, 1, 0})
+}
+
 func loop() {
+	if !isInitialized {
+		initEngine()
+		isInitialized = true
+	}
+
 	gl.ClearColor(0.1, 0.2, 0.3, 1.0)
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
@@ -51,53 +96,12 @@ func loop() {
 
 	giu.Window("Inspector").Pos(20, 20).Size(300, 150).Layout(
 		giu.Label("GoEngine v0.0 - Editor"),
-
 		giu.Button("Generate Cube").OnClick(func() {
-			log.Println("Кнопка работает! Куб уже на фоне.")
+			log.Println("Кнопка работает!")
 		}),
 	)
 }
-
 func main() {
 	w := giu.NewMasterWindow("GoEngine v0.0", 1024, 768, giu.MasterWindowFlagsNotResizable)
-
-	if err := gl.Init(); err != nil {
-		log.Fatalln("Не удалось инициализировать OpenGL:", err)
-	}
-
-	gl.Enable(gl.DEPTH_TEST)
-
-	var err error
-	myShader, err = engine.NewShader(`
-		#version 410 core
-		layout(location = 0) in vec3 position;
-		uniform mat4 mvp;
-		void main() {
-			gl_Position = mvp * vec4(position, 1.0);
-		}
-	`, `
-		#version 410 core
-		out vec4 color;
-		void main() {
-			color = vec4(0.8, 0.3, 0.2, 1.0); // Ржаво-оранжевый цвет
-		}
-	`)
-	if err != nil {
-		log.Fatalln("Ошибка компиляции шейдеров:", err)
-	}
-
-	gl.GenVertexArrays(1, &vao)
-	gl.GenBuffers(1, &vbo)
-
-	gl.BindVertexArray(vao)
-	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
-	gl.BufferData(gl.ARRAY_BUFFER, len(cubeVertices)*4, gl.Ptr(cubeVertices), gl.STATIC_DRAW)
-
-	gl.VertexAttribPointerWithOffset(0, 3, gl.FLOAT, false, 0, 0)
-	gl.EnableVertexAttribArray(0)
-
-	projMatrix = mgl32.Perspective(mgl32.DegToRad(45.0), 1024.0/768.0, 0.1, 100.0)
-	viewMatrix = mgl32.LookAtV(mgl32.Vec3{2, 2, 3}, mgl32.Vec3{0, 0, 0}, mgl32.Vec3{0, 1, 0})
-
 	w.Run(loop)
 }
