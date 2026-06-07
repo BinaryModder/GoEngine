@@ -1,10 +1,11 @@
 package main
 
 import (
-	"log"
-
 	"goengine/engine"
+	"log"
+	"time"
 
+	"github.com/AllenDang/cimgui-go/imgui"
 	"github.com/AllenDang/giu"
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
@@ -17,8 +18,15 @@ var (
 	vao      uint32
 	vbo      uint32
 
+	fbo        uint32
+	fboTexture uint32
+	viewWidth  int32 = 800
+	viewHeight int32 = 600
+
 	projMatrix mgl32.Mat4
 	viewMatrix mgl32.Mat4
+
+	startTime time.Time
 )
 
 var cubeVertices = []float32{
@@ -41,8 +49,6 @@ func initEngine() {
 		log.Fatalln("Не удалось инициализировать OpenGL:", err)
 	}
 
-	gl.Enable(gl.DEPTH_TEST)
-
 	var err error
 	myShader, err = engine.NewShader(`#version 410 core
 		layout(location = 0) in vec3 position;
@@ -57,7 +63,7 @@ func initEngine() {
 		}
 	`)
 	if err != nil {
-		log.Fatalln("Ошибка компиляции шейдеров:", err)
+		log.Fatalln("Ошибка шейдеров:", err)
 	}
 
 	gl.GenVertexArrays(1, &vao)
@@ -65,13 +71,36 @@ func initEngine() {
 
 	gl.BindVertexArray(vao)
 	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
-	//gl.BufferData(gl.ARRAY_BUFFER, len(cubeVertices)*4, gl.Ptr(cubeVertices), gl.STATIC_DRAW)
-
+	gl.BufferData(gl.ARRAY_BUFFER, len(cubeVertices)*4, gl.Ptr(cubeVertices), gl.STATIC_DRAW)
 	gl.VertexAttribPointerWithOffset(0, 3, gl.FLOAT, false, 0, 0)
 	gl.EnableVertexAttribArray(0)
+	gl.BindBuffer(gl.ARRAY_BUFFER, 0)
+	gl.BindVertexArray(0)
 
-	projMatrix = mgl32.Perspective(mgl32.DegToRad(45.0), 1024.0/768.0, 0.1, 100.0)
+	var rbo uint32
+	gl.GenFramebuffers(1, &fbo)
+	gl.BindFramebuffer(gl.FRAMEBUFFER, fbo)
+
+	gl.GenTextures(1, &fboTexture)
+	gl.BindTexture(gl.TEXTURE_2D, fboTexture)
+	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGB, viewWidth, viewHeight, 0, gl.RGB, gl.UNSIGNED_BYTE, nil)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+	gl.FramebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, fboTexture, 0)
+
+	gl.GenRenderbuffers(1, &rbo)
+	gl.BindRenderbuffer(gl.RENDERBUFFER, rbo)
+	gl.RenderbufferStorage(gl.RENDERBUFFER, gl.DEPTH24_STENCIL8, viewWidth, viewHeight)
+	gl.FramebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_STENCIL_ATTACHMENT, gl.RENDERBUFFER, rbo)
+
+	if gl.CheckFramebufferStatus(gl.FRAMEBUFFER) != gl.FRAMEBUFFER_COMPLETE {
+		log.Fatalln("Ошибка: FBO не готов!")
+	}
+	gl.BindFramebuffer(gl.FRAMEBUFFER, 0)
+
+	projMatrix = mgl32.Perspective(mgl32.DegToRad(45.0), float32(viewWidth)/float32(viewHeight), 0.1, 100.0)
 	viewMatrix = mgl32.LookAtV(mgl32.Vec3{2, 2, 3}, mgl32.Vec3{0, 0, 0}, mgl32.Vec3{0, 1, 0})
+	startTime = time.Now()
 }
 
 func loop() {
@@ -80,12 +109,19 @@ func loop() {
 		isInitialized = true
 	}
 
+	gl.BindFramebuffer(gl.FRAMEBUFFER, fbo)
+	gl.Viewport(0, 0, viewWidth, viewHeight)
+
+	gl.Enable(gl.DEPTH_TEST)
+	gl.DepthFunc(gl.LESS)
+
 	gl.ClearColor(0.1, 0.2, 0.3, 1.0)
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 	myShader.Use()
 
-	modelMatrix := mgl32.Ident4()
+	elapsed := float32(time.Since(startTime).Seconds())
+	modelMatrix := mgl32.HomogRotate3D(elapsed, mgl32.Vec3{0.5, 1.0, 0.2}.Normalize())
 	mvp := projMatrix.Mul4(viewMatrix).Mul4(modelMatrix)
 
 	mvpLocation := gl.GetUniformLocation(myShader.ProgramID, gl.Str("mvp\x00"))
@@ -93,14 +129,19 @@ func loop() {
 
 	gl.BindVertexArray(vao)
 	gl.DrawArrays(gl.TRIANGLES, 0, 36)
+	gl.BindVertexArray(0)
 
-	giu.Window("Inspector").Pos(20, 20).Size(300, 150).Layout(
-		giu.Label("GoEngine v0.0 - Editor"),
-		giu.Button("Generate Cube").OnClick(func() {
-			log.Println("Кнопка работает!")
+	gl.BindFramebuffer(gl.FRAMEBUFFER, 0)
+
+	giu.SingleWindow().Layout(
+		giu.Label("GoEngine v0.0 - Editor Viewport"),
+
+		giu.Custom(func() {
+			imgui.Image(imgui.TextureID(fboTexture), imgui.Vec2{X: float32(viewWidth), Y: float32(viewHeight)})
 		}),
 	)
 }
+
 func main() {
 	w := giu.NewMasterWindow("GoEngine v0.0", 1024, 768, giu.MasterWindowFlagsNotResizable)
 	w.Run(loop)

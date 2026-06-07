@@ -3,13 +3,13 @@ module goengine
 go 1.25.0
 
 require (
+	github.com/AllenDang/cimgui-go v1.3.2-0.20250409185506-6b2ff1aa26b5
 	github.com/AllenDang/giu v0.14.1
 	github.com/go-gl/gl v0.0.0-20260331235117-4566fea9a276
 	github.com/go-gl/mathgl v1.2.0
 )
 
 require (
-	github.com/AllenDang/cimgui-go v1.3.2-0.20250409185506-6b2ff1aa26b5 // indirect
 	github.com/AllenDang/go-findfont v0.0.0-20200702051237-9f180485aeb8 // indirect
 	github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3 // indirect
 	github.com/gucio321/glm-go v0.0.0-20241029220517-e1b5a3e011c8 // indirect
