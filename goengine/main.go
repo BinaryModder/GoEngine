@@ -1,9 +1,13 @@
 package main
 
 import (
-	"goengine/engine"
+	"flag"
 	"log"
+	"os"
+	"os/exec"
 	"time"
+
+	"goengine/engine"
 
 	"github.com/AllenDang/cimgui-go/imgui"
 	"github.com/AllenDang/giu"
@@ -12,6 +16,7 @@ import (
 )
 
 var (
+	isEditorMode  bool
 	isInitialized bool
 
 	myShader *engine.Shader
@@ -25,8 +30,7 @@ var (
 
 	projMatrix mgl32.Mat4
 	viewMatrix mgl32.Mat4
-
-	startTime time.Time
+	startTime  time.Time
 )
 
 var cubeVertices = []float32{
@@ -42,6 +46,37 @@ var cubeVertices = []float32{
 	0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5,
 	-0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5,
 	0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5,
+}
+
+func loopLauncher() {
+	giu.SingleWindow().Layout(
+		giu.Dummy(0, 100),
+		giu.Row(
+			giu.Dummy(220, 0),
+			giu.Label("GoEngine Hub"),
+		),
+		giu.Dummy(0, 30),
+		giu.Row(
+			giu.Dummy(220, 0),
+			giu.Button("Create New Project").Size(150, 40).OnClick(func() {
+				exePath, err := os.Executable()
+				if err != nil {
+					log.Fatalln("Не удалось найти исполняемый файл:", err)
+				}
+
+				cmd := exec.Command(exePath, "-editor")
+
+				cmd.Stdout = os.Stdout
+				cmd.Stderr = os.Stderr
+
+				if err := cmd.Start(); err != nil {
+					log.Fatalln("Не удалось запустить редактор:", err)
+				}
+
+				os.Exit(0)
+			}),
+		),
+	)
 }
 
 func initEngine() {
@@ -103,7 +138,7 @@ func initEngine() {
 	startTime = time.Now()
 }
 
-func loop() {
+func loopEditor() {
 	if !isInitialized {
 		initEngine()
 		isInitialized = true
@@ -135,7 +170,6 @@ func loop() {
 
 	giu.SingleWindow().Layout(
 		giu.Label("GoEngine v0.0 - Editor Viewport"),
-
 		giu.Custom(func() {
 			imgui.Image(imgui.TextureID(fboTexture), imgui.Vec2{X: float32(viewWidth), Y: float32(viewHeight)})
 		}),
@@ -143,6 +177,14 @@ func loop() {
 }
 
 func main() {
-	w := giu.NewMasterWindow("GoEngine v0.0", 1024, 768, giu.MasterWindowFlagsNotResizable)
-	w.Run(loop)
+	flag.BoolVar(&isEditorMode, "editor", false, "Запустить в режиме редактора")
+	flag.Parse()
+
+	if isEditorMode {
+		w := giu.NewMasterWindow("GoEngine v0.0 - Editor", 1024, 768, 0)
+		w.Run(loopEditor)
+	} else {
+		w := giu.NewMasterWindow("GoEngine Hub", 600, 400, 0)
+		w.Run(loopLauncher)
+	}
 }
