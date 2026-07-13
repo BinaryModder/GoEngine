@@ -2,18 +2,18 @@ package main
 
 import (
 	"flag"
-
-	"goengine/editor"
-	"goengine/hub"
-
 	"github.com/AllenDang/giu"
+	"goengine/editor"
+	"goengine/hub/ui"
+	"log"
 )
 
-var editorMode bool
-var projectPath string
+var (
+	editorMode  bool
+	projectPath string
+)
 
 func main() {
-
 	flag.BoolVar(
 		&editorMode,
 		"editor",
@@ -32,6 +32,20 @@ func main() {
 
 	if editorMode {
 
+		if projectPath == "" {
+			log.Fatal(
+				"Project path is empty",
+			)
+		}
+
+		editor.State.ProjectPath = projectPath
+
+		err := editor.LoadScene()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		window := giu.NewMasterWindow(
 			"GoEngine Editor",
 			1200,
@@ -40,11 +54,7 @@ func main() {
 		)
 
 		window.Run(
-			func() {
-				editor.LoadProject(projectPath)
-
-				editor.Loop(projectPath)
-			},
+			editor.Loop,
 		)
 
 	} else {
@@ -57,7 +67,7 @@ func main() {
 		)
 
 		window.Run(
-			hub.Loop,
+			ui.Loop,
 		)
 
 	}

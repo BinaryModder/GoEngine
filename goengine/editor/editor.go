@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func Loop(project string) {
+func Loop() {
 
 	giu.SingleWindow().
 		Layout(
@@ -17,18 +17,18 @@ func Loop(project string) {
 			),
 
 			giu.Label(
-				project,
+				State.ProjectPath,
 			),
 		)
 
 }
 
-var current_scene *scene.Scene
+var currentScene *scene.Scene
 
-func LoadProject(path string) {
+func LoadScene() error {
 
 	scenePath := filepath.Join(
-		path,
+		State.ProjectPath,
 		"Assets",
 		"Scenes",
 		"Main.scene",
@@ -39,19 +39,19 @@ func LoadProject(path string) {
 	)
 
 	if err != nil {
-		fmt.Println(err)
-		return
+		return err
 	}
 
-	current_scene = s
+	currentScene = s
 
-	fmt.Printf("Scene loaded\n Name: %s \n", current_scene.Name)
+	fmt.Printf("Scene loaded\n Name: %s \n", currentScene.Name)
 
-	for _, obj := range current_scene.Objects {
+	for _, obj := range currentScene.Objects {
 		fmt.Println(
 			"Objects:",
 			obj.Name,
 			obj.Type,
 		)
 	}
+	return nil
 }

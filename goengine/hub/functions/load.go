@@ -1,4 +1,4 @@
-package hub
+package functions
 
 import (
 	"fmt"
@@ -25,11 +25,11 @@ func LoadProject() {
 		path,
 	)
 
-	openEditor(path)
+	OpenEditor(path)
 
 }
 
-func openEditor(path string) {
+func OpenEditor(path string) {
 
 	exePath, err := os.Executable()
 
