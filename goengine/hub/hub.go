@@ -9,6 +9,8 @@ var (
 
 	projectName = "NewProject"
 	projectPath = "./Projects"
+
+	projectToLoad string
 )
 
 func Loop() {
@@ -37,6 +39,12 @@ func Loop() {
 				chooseFolder()
 			}),
 		),
+
+		giu.Button(
+			"Load 3D Project",
+		).OnClick(func() {
+			LoadProject()
+		}),
 	}
 
 	if showCreate {

@@ -41,6 +41,8 @@ func main() {
 
 		window.Run(
 			func() {
+				editor.LoadProject(projectPath)
+
 				editor.Loop(projectPath)
 			},
 		)
