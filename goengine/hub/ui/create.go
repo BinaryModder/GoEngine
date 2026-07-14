@@ -41,7 +41,13 @@ func CreateProjectView() giu.Widget {
 				giu.Button("Browse").
 					OnClick(func() {
 
-						functions.ChooseFolder()
+						folder, err := functions.ChooseFolder()
+
+						if err != nil {
+							fmt.Println(err)
+							return
+						}
+						hub.State.NewCreatePath = folder
 
 					}),
 			),

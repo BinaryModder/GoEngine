@@ -1,0 +1,24 @@
+
+
+{
+ "objects":[
+
+  {
+   "name":"Camera",
+   "type":"Camera"
+  },
+
+  {
+   "name":"Light",
+   "type":"DirectionalLight"
+  },
+
+  {
+   "name":"Cube",
+   "type":"Mesh"
+  }
+
+ ]
+
+}
+

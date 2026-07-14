@@ -55,6 +55,8 @@ func CreateProject(
 		return err
 	}
 
+	saveNewProjectToList()
+
 	return nil
 
 }
@@ -148,15 +150,28 @@ func createScene(root string) error {
 
 }
 
-func ChooseFolder() error {
+func saveNewProjectToList() {
+
+	hub.State.Projects = append(
+		hub.State.Projects,
+		hub.Project{
+			Name:       hub.State.NewCreateName,
+			Path:       filepath.Join(AbsolutePath(hub.State.NewCreatePath), hub.State.NewCreateName),
+			CreatedAt:  time.Now(),
+			LastOpened: time.Now(),
+		},
+	)
+
+}
+
+func ChooseFolder() (string, error) {
 
 	folder, err := dialog.Directory().Title("Choose Project path").Browse()
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	hub.State.NewCreatePath = folder
-	return nil
+	return folder, nil
 
 }

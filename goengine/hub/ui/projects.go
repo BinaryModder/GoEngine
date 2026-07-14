@@ -1,8 +1,8 @@
 package ui
 
 import (
+	"fmt"
 	"github.com/AllenDang/giu"
-
 	"goengine/hub"
 	"goengine/hub/functions"
 )
@@ -21,7 +21,15 @@ func ProjectsView() giu.Widget {
 				}),
 			giu.Button("Load Project").
 				OnClick(func() {
-					functions.ChooseFolder()
+
+					loaded_project, err := functions.LoadProject()
+
+					if err != nil {
+						fmt.Println(err)
+						return
+					}
+
+					hub.State.Projects = append(hub.State.Projects, loaded_project)
 				}),
 		),
 
@@ -32,33 +40,43 @@ func ProjectsView() giu.Widget {
 
 		p := project
 
-		widgets = append(widgets,
+		widgets = append(
+			widgets,
 
-			giu.Row(
+			giu.Separator(),
 
-				giu.Label(p.Name),
-
-				giu.Dummy(30, 0),
-
-				giu.Label(p.Path),
-
-				giu.Dummy(30, 0),
-
-				giu.Label(p.LastOpened),
-
-				giu.Dummy(20, 0),
-
-				giu.Button("Open").
-					OnClick(func() {
-
-						functions.OpenEditor(p.Path)
-
-					}),
-			),
+			projectCard(p),
 		)
 	}
 
 	return giu.Column(
 		widgets...,
 	)
+}
+
+func projectCard(project hub.Project) giu.Widget {
+
+	return giu.Child().
+		Size(
+			750,
+			120,
+		).Layout(
+		giu.Row(
+			giu.Column(
+				giu.Label(project.Name),
+				giu.Label(project.Path),
+				giu.Label(project.LastOpened.Format("02.01.2006")),
+			),
+
+			giu.Dummy(
+				30,
+				0,
+			),
+
+			giu.Button("Open").OnClick(func() {
+				functions.OpenEditor(project.Path)
+			}),
+		),
+	)
+
 }

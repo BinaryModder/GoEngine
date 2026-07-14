@@ -1,10 +1,9 @@
 package ui
 
 import (
-	"fmt"
 	"github.com/AllenDang/giu"
+	"goengine/hub/functions"
 	"goengine/resources"
-	"path/filepath"
 )
 
 var (
@@ -13,11 +12,8 @@ var (
 )
 
 func LoadAssets() {
-	path, err := filepath.Abs("resources/GoEngineIcon.png")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Loading", path, "...")
+
+	path := functions.AbsolutePath("resources/GoEngineIcon.png")
 
 	resources.LoadTexture(path, func(texture *giu.Texture) {
 

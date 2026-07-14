@@ -7,7 +7,8 @@ import (
 type Project struct {
 	Name       string
 	Path       string
-	LastOpened string
+	CreatedAt  time.Time
+	LastOpened time.Time
 }
 
 type ProjectConfig struct {
