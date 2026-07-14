@@ -32,5 +32,7 @@ func Sidebar() giu.Widget {
 
 					hub.State.CurrentPage = hub.PageSettings
 				}),
+			giu.Dummy(0, 400),
+			Logo(),
 		)
 }

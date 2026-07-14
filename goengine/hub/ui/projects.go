@@ -13,8 +13,6 @@ func ProjectsView() giu.Widget {
 
 		giu.Row(
 
-			giu.Label("Projects"),
-
 			giu.Dummy(20, 0),
 
 			giu.Button("New Project").

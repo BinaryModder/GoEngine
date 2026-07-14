@@ -1,40 +1,76 @@
 package ui
 
 import (
+	"fmt"
 	"github.com/AllenDang/giu"
-
 	"goengine/hub"
 	"goengine/hub/functions"
 )
 
-func CreateWindow() giu.Widget {
+func CreateProjectView() giu.Widget {
 
 	return giu.Child().
+		Size(400, 300).
+		Border(true).
 		Layout(
 
 			giu.Label(
 				"Create 3D Project",
 			),
 
+			giu.Separator(),
+
+			giu.Label(
+				"Project Name",
+			),
+
 			giu.InputText(
 				&hub.State.NewCreateName,
 			),
 
-			giu.InputText(
-				&hub.State.NewCreatePath,
+			giu.Label(
+				"Location",
 			),
 
-			giu.Button(
-				"Create",
-			).
+			giu.Row(
+
+				giu.InputText(
+					&hub.State.NewCreatePath,
+				),
+
+				giu.Button("Browse").
+					OnClick(func() {
+
+						functions.ChooseFolder()
+
+					}),
+			),
+
+			giu.Separator(),
+
+			giu.Button("Create").
 				OnClick(func() {
 
-					functions.CreateProject(
+					err := functions.CreateProject(
 						hub.State.NewCreateName,
 						hub.State.NewCreatePath,
 					)
 
+					if err == nil {
+
+						hub.State.ShowCreateProject = false
+
+					} else {
+						fmt.Println(err)
+					}
+
+				}),
+
+			giu.Button("Cancel").
+				OnClick(func() {
+
+					hub.State.ShowCreateProject = false
+
 				}),
 		)
-
 }

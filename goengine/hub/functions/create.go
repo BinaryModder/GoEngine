@@ -2,7 +2,6 @@ package functions
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/sqweek/dialog"
 	"goengine/hub"
 	"os"
@@ -20,10 +19,6 @@ func CreateProject(
 			location,
 			name,
 		)
-
-	if _, err := os.Stat(root); err != nil {
-		return fmt.Errorf("Project in %s already exists", root)
-	}
 
 	folders := []string{
 

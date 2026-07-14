@@ -61,9 +61,9 @@ func main() {
 
 		window := giu.NewMasterWindow(
 			"GoEngine Hub",
-			800,
-			600,
-			0,
+			1050,
+			750,
+			giu.MasterWindowFlagsNotResizable,
 		)
 
 		window.Run(

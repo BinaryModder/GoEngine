@@ -6,13 +6,15 @@ import (
 
 func Loop() {
 
+	if !isAssetsLoaded {
+		LoadAssets()
+	}
 	giu.SingleWindow().
 		Layout(
 
 			giu.Row(
 
 				Sidebar(),
-				giu.Label("Projects"),
 				MainPanel(),
 			),
 		)
