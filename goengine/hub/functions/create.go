@@ -108,32 +108,33 @@ func createProjFile(
 
 func createScene(root string) error {
 
-	scene := `
+	scene := hub.Scene{
+		Name: "Main",
+		Objects: []hub.SceneObject{
+			{
+				Name: "Camera",
+				Type: "Camera",
+			},
+			{
+				Name: "Light",
+				Type: "DirectionalLight",
+			},
+			{
+				Name: "Cube",
+				Type: "Mesh",
+			},
+		},
+	}
 
-{
- "objects":[
+	data, err := json.MarshalIndent(
+		scene,
+		"",
+		"    ",
+	)
 
-  {
-   "name":"Camera",
-   "type":"Camera"
-  },
-
-  {
-   "name":"Light",
-   "type":"DirectionalLight"
-  },
-
-  {
-   "name":"Cube",
-   "type":"Mesh"
-  }
-
- ]
-
-}
-
-`
-
+	if err != nil {
+		return err
+	}
 	return os.WriteFile(
 
 		filepath.Join(
@@ -143,7 +144,7 @@ func createScene(root string) error {
 			"Main.scene",
 		),
 
-		[]byte(scene),
+		data,
 
 		0644,
 	)

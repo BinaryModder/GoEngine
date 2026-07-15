@@ -16,7 +16,6 @@ func MainPanel() giu.Widget {
 		widgets = append(
 			widgets, giu.Separator(), ProjectsView(),
 		)
-		//Toolbar(),
 
 	case hub.PageSettings:
 		widgets = append(
