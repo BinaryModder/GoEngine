@@ -2,26 +2,9 @@ package editor
 
 import (
 	"fmt"
-	"github.com/AllenDang/giu"
 	"goengine/scene"
 	"path/filepath"
 )
-
-func Loop() {
-
-	giu.SingleWindow().
-		Layout(
-
-			giu.Label(
-				"GoEngine Editor",
-			),
-
-			giu.Label(
-				State.ProjectPath,
-			),
-		)
-
-}
 
 var currentScene *scene.Scene
 

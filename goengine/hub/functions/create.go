@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/sqweek/dialog"
 	"goengine/hub"
+	"goengine/scene"
 	"os"
 	"path/filepath"
 	"time"
@@ -108,9 +109,9 @@ func createProjFile(
 
 func createScene(root string) error {
 
-	scene := hub.Scene{
+	scene := scene.Scene{
 		Name: "Main",
-		Objects: []hub.SceneObject{
+		Objects: []scene.SceneObject{
 			{
 				Name: "Camera",
 				Type: "Camera",

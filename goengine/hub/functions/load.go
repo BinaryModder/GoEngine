@@ -2,11 +2,9 @@ package functions
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/sqweek/dialog"
 	"goengine/hub"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"time"
 )
@@ -26,8 +24,6 @@ func LoadProject() (hub.Project, error) {
 	if err != nil {
 		return hub.Project{}, nil
 	}
-
-	OpenEditor(path)
 
 	return project, nil
 
@@ -66,32 +62,5 @@ func readProject(path string) (hub.Project, error) {
 		CreatedAt:  config.CreatedAt,
 		LastOpened: time.Now(),
 	}, nil
-
-}
-
-func OpenEditor(path string) {
-
-	exePath, err := os.Executable()
-
-	if err != nil {
-
-		fmt.Println(err)
-
-		return
-
-	}
-
-	cmd := exec.Command(
-
-		exePath,
-
-		"-editor",
-
-		"-project",
-
-		path,
-	)
-
-	cmd.Start()
 
 }
