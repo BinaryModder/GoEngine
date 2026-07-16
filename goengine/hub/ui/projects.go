@@ -14,7 +14,6 @@ func ProjectsView() giu.Widget {
 		giu.Row(
 
 			giu.Dummy(20, 0),
-
 			giu.Button("New Project").
 				OnClick(func() {
 					hub.State.ShowCreateProject = true
@@ -64,7 +63,7 @@ func projectCard(project hub.Project) giu.Widget {
 		giu.Row(
 			giu.Column(
 				giu.Label(project.Name),
-				giu.Label(project.Path),
+				giu.Label(functions.ConfigureLabelPath(project.Path)),
 				giu.Label(project.LastOpened.Format("02.01.2006")),
 			),
 

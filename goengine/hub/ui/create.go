@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/AllenDang/giu"
 	"goengine/hub"
+	"goengine/hub/errors"
 	"goengine/hub/functions"
 )
 
@@ -56,8 +57,13 @@ func CreateProjectView() giu.Widget {
 
 			giu.Button("Create").
 				OnClick(func() {
+					err := errors.ValidateNamePath()
+					if err != nil {
+						hub.State.ErrorMessage = err.Error()
+						return
+					}
 
-					err := functions.CreateProject(
+					err = functions.CreateProject(
 						hub.State.NewCreateName,
 						hub.State.NewCreatePath,
 					)

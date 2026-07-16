@@ -17,6 +17,10 @@ type HubState struct {
 	NewCreateName string
 
 	NewCreatePath string
+
+	ErrorMessage string
 }
 
-var State HubState
+var (
+	State HubState
+)
