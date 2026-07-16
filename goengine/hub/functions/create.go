@@ -2,8 +2,8 @@ package functions
 
 import (
 	"encoding/json"
-	"github.com/sqweek/dialog"
 	"goengine/hub"
+	"goengine/project"
 	"goengine/scene"
 	"os"
 	"path/filepath"
@@ -66,7 +66,7 @@ func createProjFile(
 	name string,
 ) error {
 
-	config := hub.ProjectConfig{
+	config := project.ProjectConfig{
 
 		Name: name,
 
@@ -156,24 +156,12 @@ func saveNewProjectToList() {
 
 	hub.State.Projects = append(
 		hub.State.Projects,
-		hub.Project{
+		project.Project{
 			Name:       hub.State.NewCreateName,
 			Path:       filepath.Join(AbsolutePath(hub.State.NewCreatePath), hub.State.NewCreateName),
 			CreatedAt:  time.Now(),
 			LastOpened: time.Now(),
 		},
 	)
-
-}
-
-func ChooseFolder() (string, error) {
-
-	folder, err := dialog.Directory().Title("Choose Project path").Browse()
-
-	if err != nil {
-		return "", err
-	}
-
-	return folder, nil
 
 }

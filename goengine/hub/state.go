@@ -1,5 +1,9 @@
 package hub
 
+import (
+	"goengine/project"
+)
+
 type Page int
 
 const (
@@ -12,7 +16,7 @@ type HubState struct {
 
 	CurrentPage Page
 
-	Projects []Project
+	Projects []project.Project
 
 	NewCreateName string
 

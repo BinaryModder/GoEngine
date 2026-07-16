@@ -3,33 +3,33 @@ package functions
 import (
 	"encoding/json"
 	"github.com/sqweek/dialog"
-	"goengine/hub"
+	"goengine/project"
 	"os"
 	"path/filepath"
 	"time"
 )
 
-func LoadProject() (hub.Project, error) {
+func LoadProject() (project.Project, error) {
 
 	path, err := dialog.Directory().
 		Title("Choose GoEngine Project").
 		Browse()
 
 	if err != nil {
-		return hub.Project{}, nil
+		return project.Project{}, nil
 	}
 
-	project, err := readProject(path)
+	proj, err := readProject(path)
 
 	if err != nil {
-		return hub.Project{}, nil
+		return project.Project{}, nil
 	}
 
-	return project, nil
+	return proj, nil
 
 }
 
-func readProject(path string) (hub.Project, error) {
+func readProject(path string) (project.Project, error) {
 
 	absPath := AbsolutePath(path)
 
@@ -42,9 +42,9 @@ func readProject(path string) (hub.Project, error) {
 	data, err := os.ReadFile(projectFile)
 
 	if err != nil {
-		return hub.Project{}, err
+		return project.Project{}, err
 	}
-	var config hub.ProjectConfig
+	var config project.ProjectConfig
 
 	err = json.Unmarshal(
 		data,
@@ -53,10 +53,10 @@ func readProject(path string) (hub.Project, error) {
 
 	if err != nil {
 
-		return hub.Project{}, err
+		return project.Project{}, err
 	}
 
-	return hub.Project{
+	return project.Project{
 		Name:       config.Name,
 		Path:       absPath,
 		CreatedAt:  config.CreatedAt,

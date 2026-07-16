@@ -1,4 +1,4 @@
-package ui
+package editor_ui
 
 import "github.com/AllenDang/giu"
 

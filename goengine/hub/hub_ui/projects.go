@@ -1,10 +1,11 @@
-package ui
+package hub_ui
 
 import (
 	"fmt"
 	"github.com/AllenDang/giu"
 	"goengine/hub"
 	"goengine/hub/functions"
+	"goengine/project"
 )
 
 func ProjectsView() giu.Widget {
@@ -53,7 +54,7 @@ func ProjectsView() giu.Widget {
 	)
 }
 
-func projectCard(project hub.Project) giu.Widget {
+func projectCard(project project.Project) giu.Widget {
 
 	return giu.Child().
 		Size(
@@ -64,11 +65,11 @@ func projectCard(project hub.Project) giu.Widget {
 			giu.Column(
 				giu.Label(project.Name),
 				giu.Label(functions.ConfigureLabelPath(project.Path)),
-				giu.Label(project.LastOpened.Format("02.01.2006")),
+				giu.Label("Last opened: "+project.LastOpened.Format("02.01.2006")),
 			),
 
 			giu.Dummy(
-				30,
+				35,
 				0,
 			),
 

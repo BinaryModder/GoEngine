@@ -1,6 +1,8 @@
-package ui
+package editor_ui
 
-import "github.com/AllenDang/giu"
+import (
+	"github.com/AllenDang/giu"
+)
 
 func Viewport() giu.Widget {
 

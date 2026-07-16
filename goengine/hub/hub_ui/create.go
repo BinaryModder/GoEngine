@@ -1,4 +1,4 @@
-package ui
+package hub_ui
 
 import (
 	"fmt"

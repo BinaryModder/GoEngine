@@ -1,4 +1,4 @@
-package ui
+package hub_ui
 
 import (
 	"github.com/AllenDang/giu"
@@ -13,7 +13,6 @@ func Loop() {
 		Layout(
 
 			giu.Row(
-
 				Sidebar(),
 				MainPanel(),
 			),

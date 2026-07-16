@@ -1,6 +1,7 @@
 package functions
 
 import (
+	"github.com/sqweek/dialog"
 	"path/filepath"
 )
 
@@ -24,5 +25,16 @@ func ConfigureLabelPath(path string) string {
 	}
 
 	return "..." + path[len(path)-pathSize:]
+
+}
+func ChooseFolder() (string, error) {
+
+	folder, err := dialog.Directory().Title("Choose Project path").Browse()
+
+	if err != nil {
+		return "", err
+	}
+
+	return folder, nil
 
 }

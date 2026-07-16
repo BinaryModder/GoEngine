@@ -1,15 +1,22 @@
 package editor
 
+import (
+	"goengine/project"
+	"goengine/scene"
+)
+
 type EditorState struct {
 	ProjectPath string
 
-	Project ProjectConfig
+	ProjectConfig *project.ProjectConfig
 
-	CurrentScene string
+	CurrentScene *scene.Scene
 
 	//SelectedObject string
 
 	//EditorCamera Camera
+
+	ErrorState string
 }
 
 var State EditorState
