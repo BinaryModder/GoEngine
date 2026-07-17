@@ -20,3 +20,9 @@ type ProjectConfig struct {
 
 	CreatedAt time.Time `json:"createdAt"`
 }
+
+type ProjectFile struct {
+	Name  string
+	Path  string
+	IsDir bool
+}

@@ -1,0 +1,68 @@
+package editor_ui
+
+import (
+	"github.com/AllenDang/giu"
+	"goengine/editor/functions"
+	"goengine/resources"
+	"os"
+	"path/filepath"
+)
+
+type EditorTexture struct {
+	IsAssetsLoaded bool
+
+	FolderTexture *giu.Texture
+	FileTexture   *giu.Texture
+}
+
+var (
+	EditorTextures EditorTexture
+)
+
+func LoadTextures() error {
+	path := functions.AbsolutePath("resources/editor")
+
+	files, err := os.ReadDir(path)
+
+	if err != nil {
+		return err
+	}
+
+	for _, texture := range files {
+
+		if texture.Name() == "FolderIcon.png" {
+			folder_icon_path := filepath.Join(
+				path,
+				"FolderIcon.png",
+			)
+			if err := resources.DecodeTextureFile(folder_icon_path, func(curr_texture *giu.Texture) {
+				EditorTextures.FolderTexture = curr_texture
+
+			}); err != nil {
+				return err
+			}
+
+		}
+
+		if texture.Name() == "FileIcon.png" {
+			file_icon_path := filepath.Join(
+				path,
+				"FileIcon.png",
+			)
+
+			if err := resources.DecodeTextureFile(file_icon_path, func(curr_texture *giu.Texture) {
+				EditorTextures.FileTexture = curr_texture
+
+			}); err != nil {
+				return err
+			}
+
+		}
+
+	}
+
+	EditorTextures.IsAssetsLoaded = true
+
+	return nil
+
+}

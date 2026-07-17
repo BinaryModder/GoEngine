@@ -8,9 +8,13 @@ import (
 type EditorState struct {
 	ProjectPath string
 
+	AssetsFolder string
+
 	ProjectConfig *project.ProjectConfig
 
 	CurrentScene *scene.Scene
+
+	ProjectFiles []project.ProjectFile
 
 	//SelectedObject string
 
