@@ -18,14 +18,35 @@ func LoadFolder(path string) ([]project.ProjectFile, string, error) {
 
 	for _, file := range files {
 
-		projectFiles = append(projectFiles,
+		if file.IsDir() {
+			subPath := filepath.Join(
+				path,
+				file.Name(),
+			)
+			contains, err := os.ReadDir(subPath)
 
-			project.ProjectFile{
-				Name:  file.Name(),
-				Path:  filepath.Join(path, file.Name()),
-				IsDir: file.IsDir(),
-			},
-		)
+			if err != nil {
+				return nil, "", err
+			}
+
+			projectFiles = append(projectFiles,
+				project.ProjectFile{
+					Name:        file.Name(),
+					Path:        filepath.Join(path, file.Name()),
+					IsDir:       true,
+					AmountFiles: len(contains),
+				})
+		} else {
+			projectFiles = append(projectFiles,
+
+				project.ProjectFile{
+					Name:        file.Name(),
+					Path:        filepath.Join(path, file.Name()),
+					IsDir:       false,
+					AmountFiles: 0,
+				},
+			)
+		}
 	}
 
 	return projectFiles, path, nil

@@ -1,16 +1,32 @@
 package editor_ui
 
-import "github.com/AllenDang/giu"
+import (
+	"github.com/AllenDang/giu"
+	"goengine/editor"
+	"goengine/editor/functions"
+)
 
 func MenuBar() giu.Widget {
 
 	return giu.Row(
 
-		giu.Button("File"),
+		giu.Button("File").OnClick(
+			func() {
+				if err := functions.FileMenuBar(); err != nil {
+					return
+				}
+			},
+		),
 
 		giu.Button("Edit"),
 
-		giu.Button("Assets"),
+		giu.Button("Assets").OnClick(
+			func() {
+				if err := functions.AssetMenuBar(editor.State.DefaultAssetsFolder); err != nil {
+					return
+				}
+			},
+		),
 
 		giu.Button("GameObject"),
 

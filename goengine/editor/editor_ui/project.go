@@ -15,7 +15,7 @@ func Project() giu.Widget {
 
 	layout := giu.Layout{
 
-		giu.Label("Project"),
+		giu.Label(editor.State.ProjectConfig.Name),
 		giu.Separator(),
 	}
 
@@ -24,7 +24,7 @@ func Project() giu.Widget {
 		"Assets",
 	)
 
-	if editor.State.AssetsFolder != rootAssets {
+	if editor.State.CurrentAssetsFolder != rootAssets {
 
 		layout = append(layout,
 
@@ -32,7 +32,7 @@ func Project() giu.Widget {
 				OnClick(func() {
 
 					parent := filepath.Dir(
-						editor.State.AssetsFolder,
+						editor.State.CurrentAssetsFolder,
 					)
 
 					files, folder, err :=
@@ -43,7 +43,7 @@ func Project() giu.Widget {
 					}
 
 					editor.State.ProjectFiles = files
-					editor.State.AssetsFolder = folder
+					editor.State.CurrentAssetsFolder = folder
 				}),
 
 			giu.Separator(),
@@ -56,17 +56,22 @@ func Project() giu.Widget {
 
 		f := file
 
-		icon := "📄"
+		icon := EditorTextures.FileTexture
 
 		if f.IsDir {
-			icon = "📁"
+			if f.AmountFiles != 0 {
+				icon = EditorTextures.FolderContainingTexture
+			} else {
+				icon = EditorTextures.FolderEmptyTexture
+			}
+
 		}
 
 		card := giu.Child().
-			Size(125, 115).
+			Size(125, 120).
 			Layout(
 
-				giu.Button(icon).
+				giu.ImageButton(icon).
 					Size(64, 64).
 					OnClick(func() {
 
@@ -82,7 +87,7 @@ func Project() giu.Widget {
 						}
 
 						editor.State.ProjectFiles = files
-						editor.State.AssetsFolder = folder
+						editor.State.CurrentAssetsFolder = folder
 					}),
 
 				giu.Label(f.Name),

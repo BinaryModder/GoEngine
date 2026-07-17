@@ -8,7 +8,7 @@ import (
 type EditorState struct {
 	ProjectPath string
 
-	AssetsFolder string
+	CurrentAssetsFolder string
 
 	ProjectConfig *project.ProjectConfig
 
@@ -21,6 +21,8 @@ type EditorState struct {
 	//EditorCamera Camera
 
 	ErrorState string
+
+	DefaultAssetsFolder string
 }
 
 var State EditorState

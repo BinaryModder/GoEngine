@@ -26,7 +26,8 @@ func LoadWholeProject() error {
 		return err
 	}
 
-	State.AssetsFolder = assetsPath
+	State.DefaultAssetsFolder = assetsPath
+	State.CurrentAssetsFolder = assetsPath
 	State.ProjectFiles = projectFiles
 
 	return nil

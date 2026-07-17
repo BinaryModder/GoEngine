@@ -22,7 +22,8 @@ type ProjectConfig struct {
 }
 
 type ProjectFile struct {
-	Name  string
-	Path  string
-	IsDir bool
+	Name        string
+	Path        string
+	IsDir       bool
+	AmountFiles int
 }

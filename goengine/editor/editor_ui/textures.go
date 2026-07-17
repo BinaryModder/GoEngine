@@ -11,8 +11,9 @@ import (
 type EditorTexture struct {
 	IsAssetsLoaded bool
 
-	FolderTexture *giu.Texture
-	FileTexture   *giu.Texture
+	FolderContainingTexture *giu.Texture
+	FolderEmptyTexture      *giu.Texture
+	FileTexture             *giu.Texture
 }
 
 var (
@@ -30,13 +31,13 @@ func LoadTextures() error {
 
 	for _, texture := range files {
 
-		if texture.Name() == "FolderIcon.png" {
+		if texture.Name() == "FolderEmptyIcon.png" {
 			folder_icon_path := filepath.Join(
 				path,
-				"FolderIcon.png",
+				"FolderEmptyIcon.png",
 			)
 			if err := resources.DecodeTextureFile(folder_icon_path, func(curr_texture *giu.Texture) {
-				EditorTextures.FolderTexture = curr_texture
+				EditorTextures.FolderEmptyTexture = curr_texture
 
 			}); err != nil {
 				return err
@@ -52,6 +53,20 @@ func LoadTextures() error {
 
 			if err := resources.DecodeTextureFile(file_icon_path, func(curr_texture *giu.Texture) {
 				EditorTextures.FileTexture = curr_texture
+
+			}); err != nil {
+				return err
+			}
+
+		}
+
+		if texture.Name() == "FolderContainingIcon.png" {
+			folder_icon_path := filepath.Join(
+				path,
+				"FolderContainingIcon.png",
+			)
+			if err := resources.DecodeTextureFile(folder_icon_path, func(curr_texture *giu.Texture) {
+				EditorTextures.FolderContainingTexture = curr_texture
 
 			}); err != nil {
 				return err
