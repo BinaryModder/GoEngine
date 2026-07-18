@@ -28,8 +28,12 @@ func ProjectsView() giu.Widget {
 						fmt.Println(err)
 						return
 					}
+					if loaded_project != (project.Project{}) {
+						hub.State.Projects = append(hub.State.Projects, loaded_project)
 
-					hub.State.Projects = append(hub.State.Projects, loaded_project)
+					} else {
+						return
+					}
 				}),
 		),
 

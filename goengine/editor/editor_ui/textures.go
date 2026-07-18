@@ -76,8 +76,6 @@ func LoadTextures() error {
 
 	}
 
-	EditorTextures.IsAssetsLoaded = true
-
 	return nil
 
 }

@@ -39,6 +39,10 @@ func readProject(path string) (project.Project, error) {
 		"project.json",
 	)
 
+	if _, err := os.Stat(projectFile); err != nil {
+		return project.Project{}, nil
+	}
+
 	data, err := os.ReadFile(projectFile)
 
 	if err != nil {
