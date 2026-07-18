@@ -25,6 +25,7 @@ func Loop() {
 	}
 
 	renderer.Render()
+
 	giu.SingleWindow().Layout(
 		MenuBar(),
 		giu.Separator(),

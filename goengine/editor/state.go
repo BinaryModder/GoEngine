@@ -18,8 +18,6 @@ type EditorState struct {
 
 	//SelectedObject string
 
-	//EditorCamera Camera
-
 	ErrorState string
 
 	DefaultAssetsFolder string

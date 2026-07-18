@@ -38,13 +38,11 @@ void main() {
     float line = min(grid.x, grid.y);
     float alpha = 1.0 - min(line, 1.0);
 
-    float dist = length(FragPos);
-    alpha *= max(0.0, 1.0 - (dist / 30.0)); 
 
     vec3 color = vec3(0.3); 
 
-    if(abs(FragPos.x) < 0.05) color = vec3(0.0, 0.0, 1.0); // Ось Z - синяя
-    if(abs(FragPos.z) < 0.05) color = vec3(1.0, 0.0, 0.0); // Ось X - красная
+    if(abs(FragPos.x) < 0.05) color = vec3(0.0, 0.0, 1.0); 
+    if(abs(FragPos.z) < 0.05) color = vec3(1.0, 0.0, 0.0); 
 
     FragColor = vec4(color, alpha);
 }
@@ -57,7 +55,7 @@ func InitGrid() {
 		log.Fatalf("Failed to compile grid shader: %v", err)
 	}
 
-	var size float32 = 50.0
+	var size float32 = 2000.0
 	vertices := []float32{
 		-size, 0.0, -size,
 		size, 0.0, -size,

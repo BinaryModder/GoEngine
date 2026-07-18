@@ -109,26 +109,47 @@ func createProjFile(
 
 func createScene(root string) error {
 
-	scene := scene.Scene{
+	sceneData := scene.Scene{
 		Name: "Main",
 		Objects: []scene.SceneObject{
 			{
 				Name: "Camera",
 				Type: "Camera",
+				Transform: scene.Transform{
+					Position: [3]float32{0, 5, 10},
+					Rotation: [3]float32{-25, -90, 0},
+					Scale:    [3]float32{1, 1, 1},
+				},
+				MeshType:   "None",
+				Parameters: map[string]any{},
 			},
 			{
 				Name: "Light",
 				Type: "DirectionalLight",
+				Transform: scene.Transform{
+					Position: [3]float32{0, 10, 0},
+					Rotation: [3]float32{45, 45, 0},
+					Scale:    [3]float32{1, 1, 1},
+				},
+				MeshType:   "None",
+				Parameters: map[string]any{},
 			},
 			{
 				Name: "Cube",
 				Type: "Mesh",
+				Transform: scene.Transform{
+					Position: [3]float32{0, 1, 0},
+					Rotation: [3]float32{0, 0, 0},
+					Scale:    [3]float32{1, 1, 1},
+				},
+				MeshType:   "Cube",
+				Parameters: map[string]any{},
 			},
 		},
 	}
 
 	data, err := json.MarshalIndent(
-		scene,
+		sceneData,
 		"",
 		"    ",
 	)
@@ -136,20 +157,12 @@ func createScene(root string) error {
 	if err != nil {
 		return err
 	}
+
 	return os.WriteFile(
-
-		filepath.Join(
-			root,
-			"Assets",
-			"Scenes",
-			"Main.scene",
-		),
-
+		filepath.Join(root, "Assets", "Scenes", "Main.scene"),
 		data,
-
 		0644,
 	)
-
 }
 
 func saveNewProjectToList() {

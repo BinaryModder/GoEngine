@@ -9,7 +9,10 @@ import (
 func Viewport() giu.Widget {
 
 	return giu.Child().
-		Size(ViewportWidth, ViewportHeight).
+		Border(false).
+		Size(ViewportWidth, ViewportHeight).Flags(
+		giu.WindowFlagsNoScrollbar |
+			giu.WindowFlagsNoScrollWithMouse).
 		Layout(
 
 			giu.Custom(func() {
@@ -18,6 +21,9 @@ func Viewport() giu.Widget {
 					giu.Label("Initializing renderer").Build()
 					return
 				}
+
+				imgui.SetCursorPos(imgui.Vec2{X: 0,
+					Y: 0})
 				textureID := imgui.TextureID(uintptr(renderer.State.FrameBuffer.ColorTexture))
 
 				width := float32(ViewportWidth)

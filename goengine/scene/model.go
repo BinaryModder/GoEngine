@@ -22,6 +22,10 @@ type Scene struct {
 }
 
 type SceneObject struct {
-	Name string `json:"name"`
-	Type string `json:"type"`
+	Name      string    `json:"name"`
+	Type      string    `json:"type"`
+	Transform Transform `json:"transform"`
+	MeshType  string    `json:"meshtype"`
+
+	Parameters map[string]any `json:"parameters, omitempty"`
 }
