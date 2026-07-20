@@ -16,7 +16,7 @@ type EditorState struct {
 
 	ProjectFiles []project.ProjectFile
 
-	//SelectedObject string
+	SelectedObject string
 
 	ErrorState string
 

@@ -18,6 +18,14 @@ func MenuBar() giu.Widget {
 			},
 		),
 
+		giu.Button("Save").OnClick(
+			func() {
+				if err := functions.SaveProject(editor.State.CurrentScene, editor.State.ProjectPath); err != nil {
+					return
+				}
+			},
+		),
+
 		giu.Button("Edit"),
 
 		giu.Button("Assets").OnClick(

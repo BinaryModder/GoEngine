@@ -109,44 +109,7 @@ func createProjFile(
 
 func createScene(root string) error {
 
-	sceneData := scene.Scene{
-		Name: "Main",
-		Objects: []scene.SceneObject{
-			{
-				Name: "Camera",
-				Type: "Camera",
-				Transform: scene.Transform{
-					Position: [3]float32{0, 5, 10},
-					Rotation: [3]float32{-25, -90, 0},
-					Scale:    [3]float32{1, 1, 1},
-				},
-				MeshType:   "None",
-				Parameters: map[string]any{},
-			},
-			{
-				Name: "Light",
-				Type: "DirectionalLight",
-				Transform: scene.Transform{
-					Position: [3]float32{0, 10, 0},
-					Rotation: [3]float32{45, 45, 0},
-					Scale:    [3]float32{1, 1, 1},
-				},
-				MeshType:   "None",
-				Parameters: map[string]any{},
-			},
-			{
-				Name: "Cube",
-				Type: "Mesh",
-				Transform: scene.Transform{
-					Position: [3]float32{0, 1, 0},
-					Rotation: [3]float32{0, 0, 0},
-					Scale:    [3]float32{1, 1, 1},
-				},
-				MeshType:   "Cube",
-				Parameters: map[string]any{},
-			},
-		},
-	}
+	sceneData := CreateDefaultScene()
 
 	data, err := json.MarshalIndent(
 		sceneData,
@@ -177,4 +140,20 @@ func saveNewProjectToList() {
 		},
 	)
 
+}
+func CreateDefaultScene() *scene.Scene {
+	newScene := &scene.Scene{
+		Name:    "Main Scene",
+		Objects: []scene.SceneObject{},
+	}
+
+	mainCamera := scene.NewCamera("Main Camera")
+	dirLight := scene.NewLight("Sun", 1.5, [3]float32{1.0, 0.98, 0.9})
+
+	playerCube := scene.NewCube("Player", [3]float32{0.2, 0.6, 1.0})
+	enemyCube := scene.NewCube("Enemy", [3]float32{0.8, 0.1, 0.1})
+
+	newScene.Objects = append(newScene.Objects, mainCamera, dirLight, playerCube, enemyCube)
+
+	return newScene
 }

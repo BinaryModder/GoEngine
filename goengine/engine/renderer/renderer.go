@@ -75,23 +75,37 @@ func Render() {
 
 				switch obj.MeshType {
 				case "Cube":
+
 					t := obj.Transform
-
 					model := mgl32.Ident4()
-
 					model = model.Mul4(mgl32.Translate3D(t.Position[0], t.Position[1], t.Position[2]))
-
 					model = model.Mul4(mgl32.HomogRotate3DX(mgl32.DegToRad(t.Rotation[0])))
 					model = model.Mul4(mgl32.HomogRotate3DY(mgl32.DegToRad(t.Rotation[1])))
 					model = model.Mul4(mgl32.HomogRotate3DZ(mgl32.DegToRad(t.Rotation[2])))
-
 					model = model.Mul4(mgl32.Scale3D(t.Scale[0], t.Scale[1], t.Scale[2]))
 
 					gl.UniformMatrix4fv(modelLoc, 1, false, &model[0])
 
+					colorLoc := gl.GetUniformLocation(MeshProgram, gl.Str("objectColor\x00"))
+
+					r, g, b := float32(1.0), float32(1.0), float32(1.0)
+
+					if colorParam, ok := obj.Parameters["Color"].([]interface{}); ok && len(colorParam) == 3 {
+						if rv, ok := colorParam[0].(float64); ok {
+							r = float32(rv)
+						}
+						if gv, ok := colorParam[1].(float64); ok {
+							g = float32(gv)
+						}
+						if bv, ok := colorParam[2].(float64); ok {
+							b = float32(bv)
+						}
+					}
+
+					gl.Uniform3f(colorLoc, r, g, b)
+
 					gl.BindVertexArray(Cube.VAO)
 					gl.DrawArrays(gl.TRIANGLES, 0, 36)
-
 				}
 
 			}

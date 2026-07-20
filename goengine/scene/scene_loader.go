@@ -30,3 +30,19 @@ func ReadScene(scene_path string) (*Scene, error) {
 	}, nil
 
 }
+
+func (s *Scene) SaveToFile(path string) error {
+	data, err := json.MarshalIndent(s, "", "    ")
+
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(path, data, 0644)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

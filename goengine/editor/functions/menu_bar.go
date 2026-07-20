@@ -4,14 +4,15 @@ import (
 	"errors"
 	"fmt"
 	"github.com/sqweek/dialog"
+	"goengine/scene"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 )
 
 func FileMenuBar() error {
 
-	path, err := dialog.Directory().
-		Title("Choose GoEngine Project").
+	path, err := dialog.Directory().Title("Choose GoEngine Project").
 		Browse()
 
 	if err != nil {
@@ -39,4 +40,22 @@ func AssetMenuBar(path string) error {
 	}
 	return cmd.Start()
 
+}
+func SaveProject(scene *scene.Scene, projectPath string) error {
+	if scene != nil {
+		savePath := filepath.Join(
+			projectPath,
+			"Assets",
+			"Scenes",
+			"Main.scene",
+		)
+		err := scene.SaveToFile(savePath)
+
+		if err != nil {
+			return errors.New("Failed to save scene")
+		}
+		return nil
+	} else {
+		return errors.New("Could not find scene file")
+	}
 }

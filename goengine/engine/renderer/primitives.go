@@ -23,11 +23,11 @@ const MeshFragmentShader = `
 
 in vec3 FragPos;
 out vec4 FragColor;
-
+uniform vec3 objectColor;
+	
 void main() {
-    vec3 baseColor = vec3(0.8, 0.5, 0.2);
-    float fakeLight = (FragPos.y + 0.5);
-    FragColor = vec4(baseColor * fakeLight, 1.0);
+    float fakeLight = (FragPos.y + 0.5) * 0.3 + 0.7;
+    FragColor = vec4(objectColor * fakeLight, 1.0);
 }
 `
 

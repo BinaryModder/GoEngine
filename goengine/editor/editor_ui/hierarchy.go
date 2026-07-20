@@ -29,11 +29,17 @@ func Hierarchy() giu.Widget {
 
 			obj := object
 
+			isSelected := editor.State.SelectedObject == obj.Name
+
 			widgets = append(
 
 				widgets,
 
-				giu.Selectable(obj.Name),
+				giu.Selectable(obj.Name).
+					Selected(isSelected).
+					OnClick(func() {
+						editor.State.SelectedObject = obj.Name
+					}),
 			)
 		}
 
