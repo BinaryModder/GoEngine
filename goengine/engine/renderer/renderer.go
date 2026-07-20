@@ -89,7 +89,7 @@ func Render() {
 
 					gl.UniformMatrix4fv(modelLoc, 1, false, &model[0])
 
-					gl.BindVertexArray(CubeVAO)
+					gl.BindVertexArray(Cube.VAO)
 					gl.DrawArrays(gl.TRIANGLES, 0, 36)
 
 				}

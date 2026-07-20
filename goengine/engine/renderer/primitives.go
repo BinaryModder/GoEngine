@@ -6,75 +6,139 @@ const MeshVertexShader = `
 #version 410 core
 layout (location = 0) in vec3 aPos;
 
-uniform mat4 model;      // Матрица трансформации (Позиция, Поворот, Масштаб)
-uniform mat4 view;       // Камера
-uniform mat4 projection; // Перспектива
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
-out vec3 FragPos; // Передаем позицию во фрагментный шейдер для расчета цвета
+out vec3 FragPos;
 
 void main() {
     FragPos = aPos;
-    // Умножаем справа налево: Вершина -> Мир -> Камера -> Экран
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 }
 `
 
 const MeshFragmentShader = `
 #version 410 core
+
 in vec3 FragPos;
 out vec4 FragColor;
 
 void main() {
-    vec3 baseColor = vec3(0.8, 0.5, 0.2); // Оранжевый цвет
-    float fakeLight = (FragPos.y + 0.5);  // Градиент от -0.5 до +0.5
+    vec3 baseColor = vec3(0.8, 0.5, 0.2);
+    float fakeLight = (FragPos.y + 0.5);
     FragColor = vec4(baseColor * fakeLight, 1.0);
 }
 `
 
+type Primitive struct {
+	VAO uint32
+	VBO uint32
+
+	VertexCount int32
+}
+
 var (
 	MeshProgram uint32
-	CubeVAO     uint32
-	CubeVBO     uint32
+
+	Cube    Primitive
+	Pyramid Primitive
+	Sphere  Primitive
 )
 
 func InitPrimitives() {
 	var err error
-	MeshProgram, err = CreateShaderProgram(MeshVertexShader, MeshFragmentShader)
+
+	MeshProgram, err = CreateShaderProgram(
+		MeshVertexShader,
+		MeshFragmentShader,
+	)
 	if err != nil {
 		panic(err)
 	}
 
+	CreateCube()
+	CreatePyramid()
+}
+
+func InitPrimitive(p *Primitive, vertices []float32) {
+	gl.GenVertexArrays(1, &p.VAO)
+	gl.GenBuffers(1, &p.VBO)
+
+	gl.BindVertexArray(p.VAO)
+
+	gl.BindBuffer(gl.ARRAY_BUFFER, p.VBO)
+	gl.BufferData(
+		gl.ARRAY_BUFFER,
+		len(vertices)*4,
+		gl.Ptr(vertices),
+		gl.STATIC_DRAW,
+	)
+
+	gl.VertexAttribPointer(
+		0,
+		3,
+		gl.FLOAT,
+		false,
+		3*4,
+		gl.PtrOffset(0),
+	)
+
+	gl.EnableVertexAttribArray(0)
+
+	gl.BindVertexArray(0)
+
+	p.VertexCount = int32(len(vertices) / 3)
+}
+
+func CreateCube() {
+
 	cubeVertices := []float32{
-		// Задняя грань
 		-0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5,
 		0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5,
-		// Передняя грань
 		-0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5,
 		0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5,
-		// Левая грань
 		-0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5,
 		-0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5,
-		// Правая грань
 		0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5,
 		0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5,
-		// Нижняя грань
 		-0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5,
 		0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5,
-		// Верхняя грань
 		-0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5,
 		0.5, 0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5,
 	}
 
-	gl.GenVertexArrays(1, &CubeVAO)
-	gl.GenBuffers(1, &CubeVBO)
+	InitPrimitive(&Cube, cubeVertices)
+}
 
-	gl.BindVertexArray(CubeVAO)
+func CreatePyramid() {
 
-	gl.BindBuffer(gl.ARRAY_BUFFER, CubeVBO)
-	gl.BufferData(gl.ARRAY_BUFFER, len(cubeVertices)*4, gl.Ptr(cubeVertices), gl.STATIC_DRAW)
+	pyramidVertices := []float32{
 
-	gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 3*4, gl.PtrOffset(0))
-	gl.EnableVertexAttribArray(0)
+		0.0, 0.5, 0.0,
+		-0.5, -0.5, 0.5,
+		0.5, -0.5, 0.5,
 
-	gl.BindVertexArray(0)
+		0.0, 0.5, 0.0,
+		0.5, -0.5, 0.5,
+		0.5, -0.5, -0.5,
+
+		0.0, 0.5, 0.0,
+		0.5, -0.5, -0.5,
+		-0.5, -0.5, -0.5,
+
+		0.0, 0.5, 0.0,
+		-0.5, -0.5, -0.5,
+		-0.5, -0.5, 0.5,
+
+		-0.5, -0.5, 0.5,
+		0.5, -0.5, 0.5,
+		0.5, -0.5, -0.5,
+
+		0.5, -0.5, -0.5,
+		-0.5, -0.5, -0.5,
+		-0.5, -0.5, 0.5,
+	}
+
+	InitPrimitive(&Pyramid, pyramidVertices)
 }
