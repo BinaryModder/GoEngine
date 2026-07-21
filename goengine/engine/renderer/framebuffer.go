@@ -14,12 +14,7 @@ type FrameBuffer struct {
 	Height int32
 }
 
-func NewFrameBuffer(width, height int32) (*FrameBuffer, error) {
-
-	fbo := &FrameBuffer{
-		Width:  width,
-		Height: height,
-	}
+func (fbo *FrameBuffer) NewFrameBuffer() error {
 
 	gl.GenFramebuffers(1, &fbo.ID)
 
@@ -33,8 +28,8 @@ func NewFrameBuffer(width, height int32) (*FrameBuffer, error) {
 		gl.TEXTURE_2D,
 		0,
 		gl.RGBA8,
-		width,
-		height,
+		fbo.Width,
+		fbo.Height,
 		0,
 		gl.RGBA,
 		gl.UNSIGNED_BYTE,
@@ -71,8 +66,8 @@ func NewFrameBuffer(width, height int32) (*FrameBuffer, error) {
 	gl.RenderbufferStorage(
 		gl.RENDERBUFFER,
 		gl.DEPTH24_STENCIL8,
-		width,
-		height,
+		fbo.Width,
+		fbo.Height,
 	)
 
 	gl.FramebufferRenderbuffer(
@@ -84,11 +79,22 @@ func NewFrameBuffer(width, height int32) (*FrameBuffer, error) {
 
 	if gl.CheckFramebufferStatus(gl.FRAMEBUFFER) != gl.FRAMEBUFFER_COMPLETE {
 
-		return nil, errors.New("framebuffer is not complete")
+		return errors.New("framebuffer is not complete")
 	}
 
 	gl.BindFramebuffer(gl.FRAMEBUFFER, 0)
 
-	return fbo, nil
+	return nil
 }
 
+func (fbo *FrameBuffer) Resize(newWidth int32, newHeight int32) {
+	if fbo.Width == newWidth && fbo.Height == newHeight {
+		return
+	}
+
+	gl.DeleteFramebuffers(1, &fbo.ID)
+	gl.DeleteTextures(1, &fbo.ColorTexture)
+	gl.DeleteRenderbuffers(1, &fbo.DepthBuffer)
+
+	Init(newWidth, newHeight)
+}

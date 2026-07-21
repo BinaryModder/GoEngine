@@ -122,6 +122,6 @@ func Inspector() giu.Widget {
 	}
 
 	return giu.Child().
-		Size(InspectorWidth, ViewportHeight).
+		Size(InspectorWidth, -ProjectHeight).
 		Layout(widgets...)
 }

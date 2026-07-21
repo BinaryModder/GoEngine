@@ -46,6 +46,6 @@ func Hierarchy() giu.Widget {
 	}
 
 	return giu.Child().
-		Size(HierarchyWidth, ViewportHeight).
+		Size(HierarchyWidth, -ProjectHeight).
 		Layout(widgets...)
 }
