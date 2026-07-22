@@ -3,7 +3,7 @@ package hub_ui
 import (
 	"github.com/AllenDang/giu"
 	"goengine/hub/functions"
-	"goengine/resources"
+	"goengine/ui/resources"
 )
 
 var (
@@ -13,7 +13,7 @@ var (
 
 func LoadTextures() error {
 
-	path := functions.AbsolutePath("resources/hub/GoEngineIcon.png")
+	path := functions.AbsolutePath("ui/resources/hub/GoEngineIcon.png")
 
 	if err := resources.DecodeTextureFile(path, func(texture *giu.Texture) {
 
@@ -22,8 +22,6 @@ func LoadTextures() error {
 	}); err != nil {
 		return err
 	}
-
-	isAssetsLoaded = true
 
 	return nil
 }

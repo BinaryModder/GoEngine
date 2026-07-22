@@ -3,17 +3,18 @@ module goengine
 go 1.25.0
 
 require (
+	github.com/AllenDang/cimgui-go v1.3.2-0.20250409185506-6b2ff1aa26b5
 	github.com/AllenDang/giu v0.14.1
 	github.com/go-gl/gl v0.0.0-20260331235117-4566fea9a276
+	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20260707082822-2a407d02d01a
+	github.com/go-gl/mathgl v1.2.0
 	github.com/sqweek/dialog v0.0.0-20260123140253-64c163d53aac
 )
 
 require (
-	github.com/AllenDang/cimgui-go v1.3.2-0.20250409185506-6b2ff1aa26b5 // indirect
 	github.com/AllenDang/go-findfont v0.0.0-20200702051237-9f180485aeb8 // indirect
 	github.com/TheTitanrain/w32 v0.0.0-20180517000239-4f5cfb03fabf // indirect
 	github.com/faiface/mainthread v0.0.0-20171120011319-8b78f0a41ae3 // indirect
-	github.com/go-gl/mathgl v1.2.0 // indirect
 	github.com/gucio321/glm-go v0.0.0-20241029220517-e1b5a3e011c8 // indirect
 	github.com/mazznoer/csscolorparser v0.1.6 // indirect
 	github.com/napsy/go-css v1.0.0 // indirect

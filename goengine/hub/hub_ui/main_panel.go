@@ -4,6 +4,7 @@ import (
 	"github.com/AllenDang/giu"
 
 	"goengine/hub"
+	"goengine/ui/scale"
 )
 
 func MainPanel() giu.Widget {
@@ -30,7 +31,10 @@ func MainPanel() giu.Widget {
 	}
 
 	return giu.Child().
-		Size(900, 700).
+		Size(
+			scale.X(900),
+			scale.Y(700),
+		).
 		Layout(
 			widgets...,
 		)

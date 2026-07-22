@@ -6,12 +6,15 @@ import (
 	"goengine/hub"
 	"goengine/hub/errors"
 	"goengine/hub/functions"
+	"goengine/ui/scale"
 )
 
 func CreateProjectView() giu.Widget {
 
 	return giu.Child().
-		Size(400, 300).
+		Size(
+			scale.X(400),
+			scale.Y(300)).
 		Border(true).
 		Layout(
 

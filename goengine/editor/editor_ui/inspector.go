@@ -15,7 +15,9 @@ func Inspector() giu.Widget {
 
 	if editor.State.CurrentScene == nil || editor.State.SelectedObject == "" {
 		widgets = append(widgets, giu.Label("No object selected"))
-		return giu.Child().Size(300, 600).Layout(widgets...)
+		return giu.Child().Size(
+			InspectorWidth, -ProjectHeight,
+		).Layout(widgets...)
 	}
 
 	var obj *scene.SceneObject
@@ -28,7 +30,7 @@ func Inspector() giu.Widget {
 
 	if obj == nil {
 		widgets = append(widgets, giu.Label("Object not found"))
-		return giu.Child().Size(300, 600).Layout(widgets...)
+		return giu.Child().Size(InspectorWidth, -ProjectHeight).Layout(widgets...)
 	}
 
 	widgets = append(widgets,
@@ -42,23 +44,23 @@ func Inspector() giu.Widget {
 
 		giu.Label("Position"),
 		giu.Row(
-			giu.SliderFloat(&obj.Transform.Position[0], -50.0, 50.0).Label("X##pos").Size(80),
-			giu.SliderFloat(&obj.Transform.Position[1], -50.0, 50.0).Label("Y##pos").Size(80),
-			giu.SliderFloat(&obj.Transform.Position[2], -50.0, 50.0).Label("Z##pos").Size(80),
+			giu.InputFloat(&obj.Transform.Position[0]).Label("X##pos").Size(parameterInputSize),
+			giu.InputFloat(&obj.Transform.Position[1]).Label("Y##pos").Size(parameterInputSize),
+			giu.InputFloat(&obj.Transform.Position[2]).Label("Z##pos").Size(parameterInputSize),
 		),
 
 		giu.Label("Rotation"),
 		giu.Row(
-			giu.SliderFloat(&obj.Transform.Rotation[0], -180.0, 180.0).Label("X##rot").Size(80),
-			giu.SliderFloat(&obj.Transform.Rotation[1], -180.0, 180.0).Label("Y##rot").Size(80),
-			giu.SliderFloat(&obj.Transform.Rotation[2], -180.0, 180.0).Label("Z##rot").Size(80),
+			giu.InputFloat(&obj.Transform.Rotation[0]).Label("X##rot").Size(parameterInputSize),
+			giu.InputFloat(&obj.Transform.Rotation[1]).Label("Y##rot").Size(parameterInputSize),
+			giu.InputFloat(&obj.Transform.Rotation[2]).Label("Z##rot").Size(parameterInputSize),
 		),
 
 		giu.Label("Scale"),
 		giu.Row(
-			giu.SliderFloat(&obj.Transform.Scale[0], 0.1, 10.0).Label("X##scl").Size(80),
-			giu.SliderFloat(&obj.Transform.Scale[1], 0.1, 10.0).Label("Y##scl").Size(80),
-			giu.SliderFloat(&obj.Transform.Scale[2], 0.1, 10.0).Label("Z##scl").Size(80),
+			giu.InputFloat(&obj.Transform.Scale[0]).Label("X##scl").Size(parameterInputSize),
+			giu.InputFloat(&obj.Transform.Scale[1]).Label("Y##scl").Size(parameterInputSize),
+			giu.InputFloat(&obj.Transform.Scale[2]).Label("Z##scl").Size(parameterInputSize),
 		),
 		giu.Separator(),
 	)
@@ -105,16 +107,19 @@ func Inspector() giu.Widget {
 					if valid {
 						widgets = append(widgets, giu.Label(key+" (RGB/XYZ)"))
 						widgets = append(widgets, giu.Row(
-							giu.SliderFloat(&vec[0], 0.0, 1.0).Label("X/R##v0_"+key).Size(80).OnChange(func() {
+							giu.SliderFloat(&vec[0], 0.0, 1.0).Label("X/R##v0_"+key).Size(parameterSliderSize).OnChange(func() {
 								obj.Parameters[key] = []interface{}{float64(vec[0]), float64(vec[1]), float64(vec[2])}
 							}),
-							giu.SliderFloat(&vec[1], 0.0, 1.0).Label("Y/G##v1_"+key).Size(80).OnChange(func() {
-								obj.Parameters[key] = []interface{}{float64(vec[0]), float64(vec[1]), float64(vec[2])}
-							}),
-							giu.SliderFloat(&vec[2], 0.0, 1.0).Label("Z/B##v2_"+key).Size(80).OnChange(func() {
+							giu.SliderFloat(&vec[1], 0.0, 1.0).Label("Y/G##v1_"+key).Size(parameterSliderSize).OnChange(func() {
 								obj.Parameters[key] = []interface{}{float64(vec[0]), float64(vec[1]), float64(vec[2])}
 							}),
 						))
+						widgets = append(widgets,
+							giu.Row(
+								giu.SliderFloat(&vec[2], 0.0, 1.0).Label("Z/B##v2_"+key).Size(parameterSliderSize).OnChange(func() {
+									obj.Parameters[key] = []interface{}{float64(vec[0]), float64(vec[1]), float64(vec[2])}
+								}),
+							))
 					}
 				}
 			}

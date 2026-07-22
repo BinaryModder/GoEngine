@@ -68,7 +68,7 @@ func Project() giu.Widget {
 		}
 
 		card := giu.Child().
-			Size(125, 120).
+			Size(folbutWeight, folbutHeight).
 			Layout(
 
 				giu.ImageButton(icon).

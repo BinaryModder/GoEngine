@@ -3,11 +3,14 @@ package hub_ui
 import (
 	"github.com/AllenDang/giu"
 	"goengine/hub"
+	"goengine/ui/scale"
 )
 
 func Sidebar() giu.Widget {
 	return giu.Child().
-		Size(220, 700).
+		Size(
+			scale.X(220),
+			scale.Y(700)).
 		Layout(
 
 			giu.Label(
@@ -32,7 +35,7 @@ func Sidebar() giu.Widget {
 
 					hub.State.CurrentPage = hub.PageSettings
 				}),
-			giu.Dummy(0, 400),
+			giu.Dummy(0, scale.Y(350)),
 			Logo(),
 		)
 }

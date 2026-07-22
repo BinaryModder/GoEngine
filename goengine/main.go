@@ -6,6 +6,7 @@ import (
 	"goengine/editor"
 	"goengine/editor/editor_ui"
 	"goengine/hub/hub_ui"
+	"goengine/ui/scale"
 	"log"
 )
 
@@ -60,8 +61,8 @@ func main() {
 
 		window := giu.NewMasterWindow(
 			"GoEngine Hub",
-			1150,
-			725,
+			scale.I(1150),
+			scale.I(725),
 			giu.MasterWindowFlagsNotResizable,
 		)
 

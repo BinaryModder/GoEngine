@@ -6,6 +6,7 @@ import (
 	"goengine/hub"
 	"goengine/hub/functions"
 	"goengine/project"
+	"goengine/ui/scale"
 )
 
 func ProjectsView() giu.Widget {
@@ -14,7 +15,7 @@ func ProjectsView() giu.Widget {
 
 		giu.Row(
 
-			giu.Dummy(20, 0),
+			giu.Dummy(scale.X(20), 0),
 			giu.Button("New Project").
 				OnClick(func() {
 					hub.State.ShowCreateProject = true
@@ -62,8 +63,8 @@ func projectCard(project project.Project) giu.Widget {
 
 	return giu.Child().
 		Size(
-			775,
-			120,
+			scale.X(775),
+			scale.Y(120),
 		).Layout(
 		giu.Row(
 			giu.Column(
