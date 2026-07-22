@@ -41,21 +41,53 @@ func AssetMenuBar(path string) error {
 	return cmd.Start()
 
 }
-func SaveProject(scene *scene.Scene, projectPath string) error {
-	if scene != nil {
-		savePath := filepath.Join(
-			projectPath,
-			"Assets",
-			"Scenes",
-			"Main.scene",
-		)
-		err := scene.SaveToFile(savePath)
-
-		if err != nil {
-			return errors.New("Failed to save scene")
-		}
-		return nil
-	} else {
-		return errors.New("Could not find scene file")
+func SaveMenuBar(scene *scene.Scene, path string) error {
+	if scene == nil {
+		return errors.New("Could not find scene")
 	}
+	savePath := filepath.Join(
+		path,
+		"Assets",
+		"Scenes",
+		"Main.scene",
+	)
+	if err := scene.SaveToFile(savePath); err != nil {
+		return errors.New("Failed to save scene")
+	}
+
+	return nil
+}
+
+func SceneObjectMenuBar(scen *scene.Scene, obj_index *int32) error {
+	if scen == nil {
+		return errors.New("Could not find scene")
+	}
+	switch *obj_index {
+	case 0:
+		nameObj := fmt.Sprintf("Cube_%d", len(scen.Objects))
+		obj := scene.NewCube(nameObj, [3]float32{1, 1, 1})
+
+		if err := scen.AddSceneObjectToTheScene(&obj); err != nil {
+			return err
+		}
+	case 1:
+		nameObj := fmt.Sprintf("Pyramid_%d", len(scen.Objects))
+		obj := scene.NewPyramid(nameObj, [3]float32{1, 1, 1})
+
+		if err := scen.AddSceneObjectToTheScene(&obj); err != nil {
+			return err
+		}
+	case 2:
+		nameObj := fmt.Sprintf("Camera_%d", len(scen.Objects))
+		obj := scene.NewCamera(nameObj)
+
+		if err := scen.AddSceneObjectToTheScene(&obj); err != nil {
+			return err
+		}
+
+	}
+
+	*obj_index = -1
+
+	return nil
 }

@@ -2,7 +2,7 @@ package scene
 
 func DefaultTransform() Transform {
 	return Transform{
-		Position: [3]float32{0, 0, 0},
+		Position: [3]float32{0, 1, 0},
 		Rotation: [3]float32{0, 0, 0},
 		Scale:    [3]float32{1, 1, 1},
 	}
@@ -12,6 +12,22 @@ func NewCube(name string, color [3]float32) SceneObject {
 		Name:      name,
 		Type:      "Mesh",
 		MeshType:  "Cube",
+		Transform: DefaultTransform(),
+		Parameters: map[string]any{
+			"Color": []interface{}{
+				float64(color[0]),
+				float64(color[1]),
+				float64(color[2]),
+			},
+		},
+	}
+}
+
+func NewPyramid(name string, color [3]float32) SceneObject {
+	return SceneObject{
+		Name:      name,
+		Type:      "Mesh",
+		MeshType:  "Pyramid",
 		Transform: DefaultTransform(),
 		Parameters: map[string]any{
 			"Color": []interface{}{

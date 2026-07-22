@@ -147,13 +147,9 @@ func CreateDefaultScene() *scene.Scene {
 		Objects: []scene.SceneObject{},
 	}
 
-	mainCamera := scene.NewCamera("Main Camera")
-	dirLight := scene.NewLight("Sun", 1.5, [3]float32{1.0, 0.98, 0.9})
+	defaultCube := scene.NewCube("defaultCube", [3]float32{1, 1, 1})
 
-	playerCube := scene.NewCube("Player", [3]float32{0.2, 0.6, 1.0})
-	enemyCube := scene.NewCube("Enemy", [3]float32{0.8, 0.1, 0.1})
-
-	newScene.Objects = append(newScene.Objects, mainCamera, dirLight, playerCube, enemyCube)
+	newScene.Objects = append(newScene.Objects, defaultCube)
 
 	return newScene
 }

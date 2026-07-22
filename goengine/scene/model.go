@@ -1,13 +1,5 @@
 package scene
 
-type GameObject struct {
-	Name string
-
-	Type string
-
-	Transform Transform
-}
-
 type Transform struct {
 	Position [3]float32
 

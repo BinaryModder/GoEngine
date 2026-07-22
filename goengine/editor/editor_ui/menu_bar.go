@@ -9,11 +9,12 @@ import (
 
 func MenuBar() giu.Widget {
 
+	var selectedObjectIndex int32 = -1 // 0 - cube , 1 - pyramid , 2 - camera
 	return giu.Row(
 		//Left Part
 		giu.Button("Save").OnClick(
 			func() {
-				if err := functions.SaveProject(editor.State.CurrentScene, editor.State.ProjectPath); err != nil {
+				if err := functions.SaveMenuBar(editor.State.CurrentScene, editor.State.ProjectPath); err != nil {
 					return
 				}
 			},
@@ -30,7 +31,17 @@ func MenuBar() giu.Widget {
 			},
 		),
 
-		giu.Button("GameObject"),
+		giu.Combo("", "SceneObj", []string{"Cube", "Pyramid", "Directional Light"}, &selectedObjectIndex).Size(120).
+			OnChange(func() {
+				if editor.State.CurrentScene == nil {
+					return
+				}
+
+				if err := functions.SceneObjectMenuBar(editor.State.CurrentScene, &selectedObjectIndex); err != nil {
+					return
+				}
+
+			}),
 
 		giu.Button("Window"),
 
