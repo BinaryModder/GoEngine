@@ -7,15 +7,25 @@ import (
 	"log"
 )
 
-var isFontScalingInitialized bool
-var isRendererInitialized bool
+var (
+	isFontScalingInitialized bool
+	isRendererInitialized    bool
+	isSizesConfigured        bool
+)
 
 func Loop() {
 
 	if !isFontScalingInitialized {
 		scale.SetFontScale()
+
 		isFontScalingInitialized = true
 
+	}
+
+	if !isSizesConfigured {
+		ConfigureSize()
+
+		isSizesConfigured = true
 	}
 	if !EditorTextures.IsAssetsLoaded {
 		if err := LoadTextures(); err != nil {

@@ -1,6 +1,8 @@
 package editor_ui
 
-import ()
+import (
+	s "goengine/ui/scale"
+)
 
 const (
 	//interface components
@@ -28,10 +30,22 @@ const (
 
 	folbutWeight = 125
 	folbutHeight = 120
-
-	//Dummies
-
-	//middle(menu bar)
-	toMiddleDummyWeight = 225.5
-	toMiddleDummyHeight = 0
 )
+
+var (
+	toMiddleDummyWeight = float32(0)
+	toMiddleDummyHeight = float32(0)
+)
+
+func ConfigureSize() {
+	switch {
+	case s.CurrentScaling == s.ScalingOther:
+
+		toMiddleDummyWeight = 450.5
+		toMiddleDummyHeight = 0
+
+	default:
+		toMiddleDummyWeight = 215
+		toMiddleDummyHeight = 0
+	}
+}

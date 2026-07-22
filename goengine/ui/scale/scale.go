@@ -4,8 +4,13 @@ import (
 	"github.com/AllenDang/cimgui-go/imgui"
 )
 
-const UIScale = 0.75
-const GlobalFontScale = 0.75
+const (
+	ScalingMac   = 0.75
+	ScalingOther = 1.3
+	UIScale      = 0.75
+)
+
+var CurrentScaling float32
 
 func X(el float32) float32 {
 	return el * UIScale
@@ -20,6 +25,16 @@ func I(el int) int {
 }
 
 func SetFontScale() {
-	imgui.CurrentIO().SetFontGlobalScale(0.75)
+	fbScale := imgui.CurrentIO().DisplayFramebufferScale()
+
+	switch {
+	case fbScale.X > 1:
+		CurrentScaling = ScalingMac
+
+		imgui.CurrentIO().SetFontGlobalScale(CurrentScaling)
+	default:
+		CurrentScaling = ScalingOther
+		imgui.CurrentIO().SetFontGlobalScale(ScalingOther)
+	}
 
 }
