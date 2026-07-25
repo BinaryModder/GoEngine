@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/sqweek/dialog"
 	"goengine/scene"
+	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
@@ -88,6 +89,26 @@ func SceneObjectMenuBar(scen *scene.Scene, obj_index *int32) error {
 	}
 
 	*obj_index = -1
+
+	return nil
+}
+
+func RunProjectMenuBar(path string) error {
+
+	exePath, err := os.Executable()
+
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command(
+		exePath,
+		"-run_proj",
+		"-project",
+		path,
+	)
+
+	cmd.Start()
 
 	return nil
 }

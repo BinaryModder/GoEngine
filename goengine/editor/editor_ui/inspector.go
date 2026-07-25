@@ -13,7 +13,7 @@ func Inspector() giu.Widget {
 		giu.Separator(),
 	}
 
-	if editor.State.CurrentScene == nil || editor.State.SelectedObject == "" {
+	if editor.EditState.CurrentScene == nil || editor.EditState.SelectedObject == "" {
 		widgets = append(widgets, giu.Label("No object selected"))
 		return giu.Child().Size(
 			InspectorWidth, -ProjectHeight,
@@ -21,9 +21,9 @@ func Inspector() giu.Widget {
 	}
 
 	var obj *scene.SceneObject
-	for i := range editor.State.CurrentScene.Objects {
-		if editor.State.CurrentScene.Objects[i].Name == editor.State.SelectedObject {
-			obj = &editor.State.CurrentScene.Objects[i]
+	for i := range editor.EditState.CurrentScene.Objects {
+		if editor.EditState.CurrentScene.Objects[i].Name == editor.EditState.SelectedObject {
+			obj = &editor.EditState.CurrentScene.Objects[i]
 			break
 		}
 	}

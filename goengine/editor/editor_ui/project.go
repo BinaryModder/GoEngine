@@ -15,16 +15,16 @@ func Project() giu.Widget {
 
 	layout := giu.Layout{
 
-		giu.Label(editor.State.ProjectConfig.Name),
+		giu.Label(editor.EditState.ProjectConfig.Name),
 		giu.Separator(),
 	}
 
 	rootAssets := filepath.Join(
-		editor.State.ProjectPath,
+		editor.EditState.ProjectPath,
 		"Assets",
 	)
 
-	if editor.State.CurrentAssetsFolder != rootAssets {
+	if editor.EditState.CurrentAssetsFolder != rootAssets {
 
 		layout = append(layout,
 
@@ -32,7 +32,7 @@ func Project() giu.Widget {
 				OnClick(func() {
 
 					parent := filepath.Dir(
-						editor.State.CurrentAssetsFolder,
+						editor.EditState.CurrentAssetsFolder,
 					)
 
 					files, folder, err :=
@@ -42,8 +42,8 @@ func Project() giu.Widget {
 						return
 					}
 
-					editor.State.ProjectFiles = files
-					editor.State.CurrentAssetsFolder = folder
+					editor.EditState.ProjectFiles = files
+					editor.EditState.CurrentAssetsFolder = folder
 				}),
 
 			giu.Separator(),
@@ -52,7 +52,7 @@ func Project() giu.Widget {
 
 	row := giu.Layout{}
 
-	for i, file := range editor.State.ProjectFiles {
+	for i, file := range editor.EditState.ProjectFiles {
 
 		f := file
 
@@ -86,8 +86,8 @@ func Project() giu.Widget {
 							return
 						}
 
-						editor.State.ProjectFiles = files
-						editor.State.CurrentAssetsFolder = folder
+						editor.EditState.ProjectFiles = files
+						editor.EditState.CurrentAssetsFolder = folder
 					}),
 
 				giu.Label(f.Name),

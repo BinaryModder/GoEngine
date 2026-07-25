@@ -2,6 +2,7 @@ package editor_ui
 
 import (
 	"github.com/AllenDang/giu"
+	"goengine/editor"
 	"goengine/engine/renderer"
 	"goengine/ui/scale"
 	"log"
@@ -41,7 +42,7 @@ func Loop() {
 		isRendererInitialized = true
 	}
 
-	renderer.Render()
+	renderer.Render(&editor.EditState)
 
 	giu.SingleWindow().Layout(
 		MenuBar(),

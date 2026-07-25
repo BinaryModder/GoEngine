@@ -4,6 +4,7 @@ import (
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
 	"goengine/editor"
+	"goengine/scene"
 )
 
 type Renderer struct {
@@ -16,7 +17,14 @@ var State Renderer
 var isGridInitialized bool
 var isPrimitivesInitialized bool
 
-func Render() {
+var Scene *scene.Scene
+
+func Render(CurState editor.State) {
+
+	if CurState == nil {
+		return
+	}
+
 	if State.FrameBuffer == nil {
 		return
 	}
@@ -30,6 +38,8 @@ func Render() {
 		InitPrimitives()
 		isPrimitivesInitialized = true
 	}
+	//binding scene
+	Scene = CurState.GetProjectScene()
 
 	gl.BindFramebuffer(gl.FRAMEBUFFER, State.FrameBuffer.ID)
 	gl.Viewport(0, 0, State.FrameBuffer.Width, State.FrameBuffer.Height)
@@ -59,7 +69,7 @@ func Render() {
 	gl.BindVertexArray(gridVAO)
 	gl.DrawArrays(gl.TRIANGLES, 0, 6)
 
-	if editor.State.CurrentScene != nil {
+	if Scene != nil {
 
 		gl.UseProgram(MeshProgram)
 
@@ -70,7 +80,7 @@ func Render() {
 
 		modelLoc := gl.GetUniformLocation(MeshProgram, gl.Str("model\x00"))
 
-		for _, obj := range editor.State.CurrentScene.Objects {
+		for _, obj := range Scene.Objects {
 			if obj.Type == "Mesh" {
 
 				switch obj.MeshType {

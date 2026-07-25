@@ -1,7 +1,6 @@
 package editor_ui
 
 import (
-	"fmt"
 	"github.com/AllenDang/giu"
 	"goengine/editor"
 	"goengine/editor/functions"
@@ -14,7 +13,7 @@ func MenuBar() giu.Widget {
 		//Left Part
 		giu.Button("Save").OnClick(
 			func() {
-				if err := functions.SaveMenuBar(editor.State.CurrentScene, editor.State.ProjectPath); err != nil {
+				if err := functions.SaveMenuBar(editor.EditState.CurrentScene, editor.EditState.ProjectPath); err != nil {
 					return
 				}
 			},
@@ -25,7 +24,7 @@ func MenuBar() giu.Widget {
 
 		giu.Button("Assets").OnClick(
 			func() {
-				if err := functions.AssetMenuBar(editor.State.DefaultAssetsFolder); err != nil {
+				if err := functions.AssetMenuBar(editor.EditState.DefaultAssetsFolder); err != nil {
 					return
 				}
 			},
@@ -33,11 +32,11 @@ func MenuBar() giu.Widget {
 
 		giu.Combo("", "SceneObj", []string{"Cube", "Pyramid", "Directional Light"}, &selectedObjectIndex).Size(120).
 			OnChange(func() {
-				if editor.State.CurrentScene == nil {
+				if editor.EditState.CurrentScene == nil {
 					return
 				}
 
-				if err := functions.SceneObjectMenuBar(editor.State.CurrentScene, &selectedObjectIndex); err != nil {
+				if err := functions.SceneObjectMenuBar(editor.EditState.CurrentScene, &selectedObjectIndex); err != nil {
 					return
 				}
 
@@ -52,7 +51,9 @@ func MenuBar() giu.Widget {
 		//Middle Part
 		giu.Button("Run").OnClick(
 			func() {
-				fmt.Println("Running project...")
+				if err := functions.RunProjectMenuBar(editor.EditState.ProjectPath); err != nil {
+					return
+				}
 			},
 		).Size(runSizeWeight, runSizeHeight),
 	)

@@ -69,7 +69,7 @@ func LoadSettings() error {
 	return nil
 }
 
-func SaveSettings(setting *GoEngineSettings) error {
+func SaveSettings() error {
 
 	configDir, err := os.UserConfigDir()
 

@@ -4,31 +4,53 @@ import (
 	"goengine/editor/functions"
 )
 
-func LoadWholeProject() error {
+func LoadEditorModeProject() error {
 
-	state, err := functions.LoadScene(State.ProjectPath)
+	state, err := functions.LoadScene(EditState.ProjectPath)
 	if err != nil {
 		return err
 	}
 
-	State.CurrentScene = state
+	EditState.CurrentScene = state
 
-	projectConfig, err := functions.LoadProjectConfig(State.ProjectPath)
-
-	if err != nil {
-		return err
-	}
-	State.ProjectConfig = projectConfig
-
-	projectFiles, assetsPath, err := functions.LoadProjectFiles(State.ProjectPath)
+	projectConfig, err := functions.LoadProjectConfig(EditState.ProjectPath)
 
 	if err != nil {
 		return err
 	}
+	EditState.ProjectConfig = projectConfig
 
-	State.DefaultAssetsFolder = assetsPath
-	State.CurrentAssetsFolder = assetsPath
-	State.ProjectFiles = projectFiles
+	projectFiles, assetsPath, err := functions.LoadProjectFiles(EditState.ProjectPath)
+
+	if err != nil {
+		return err
+	}
+
+	EditState.DefaultAssetsFolder = assetsPath
+	EditState.CurrentAssetsFolder = assetsPath
+	EditState.ProjectFiles = projectFiles
+
+	return nil
+
+}
+
+func LoadRunModeProject() error {
+
+	state, err := functions.LoadScene(RunProjState.ProjectPath)
+
+	if err != nil {
+		return err
+	}
+
+	RunProjState.CurrentScene = state
+
+	projectConf, err := functions.LoadProjectConfig(RunProjState.ProjectPath)
+
+	if err != nil {
+		return nil
+	}
+
+	RunProjState.ProjectConfig = projectConf
 
 	return nil
 

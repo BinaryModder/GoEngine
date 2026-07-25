@@ -14,7 +14,7 @@ func Hierarchy() giu.Widget {
 		giu.Separator(),
 	}
 
-	if editor.State.CurrentScene == nil {
+	if editor.EditState.CurrentScene == nil {
 
 		widgets = append(
 
@@ -25,11 +25,11 @@ func Hierarchy() giu.Widget {
 
 	} else {
 
-		for _, object := range editor.State.CurrentScene.Objects {
+		for _, object := range editor.EditState.CurrentScene.Objects {
 
 			obj := object
 
-			isSelected := editor.State.SelectedObject == obj.Name
+			isSelected := editor.EditState.SelectedObject == obj.Name
 
 			widgets = append(
 
@@ -38,7 +38,7 @@ func Hierarchy() giu.Widget {
 				giu.Selectable(obj.Name).
 					Selected(isSelected).
 					OnClick(func() {
-						editor.State.SelectedObject = obj.Name
+						editor.EditState.SelectedObject = obj.Name
 					}),
 			)
 		}
