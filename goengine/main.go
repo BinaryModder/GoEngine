@@ -6,7 +6,7 @@ import (
 	"github.com/AllenDang/giu"
 	"goengine/editor"
 	"goengine/editor/editor_ui"
-	"goengine/editor/run_proj_ui"
+	"goengine/editor/project_runner"
 	"goengine/hub/hub_ui"
 	"goengine/ui/scale"
 	"log"
@@ -92,7 +92,7 @@ func main() {
 			0,
 		)
 		window.Run(
-			run_proj_ui.Loop,
+			project_runner.Loop,
 		)
 
 	}

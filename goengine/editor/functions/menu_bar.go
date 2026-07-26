@@ -4,11 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/sqweek/dialog"
+	"goengine/engine/platform"
 	"goengine/scene"
-	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 )
 
 func FileMenuBar() error {
@@ -27,7 +26,7 @@ func AssetMenuBar(path string) error {
 
 	var cmd *exec.Cmd
 
-	switch runtime.GOOS {
+	switch platform.State.OS {
 	case "windows":
 		cmd = exec.Command("explorer", path)
 
@@ -89,26 +88,6 @@ func SceneObjectMenuBar(scen *scene.Scene, obj_index *int32) error {
 	}
 
 	*obj_index = -1
-
-	return nil
-}
-
-func RunProjectMenuBar(path string) error {
-
-	exePath, err := os.Executable()
-
-	if err != nil {
-		return err
-	}
-
-	cmd := exec.Command(
-		exePath,
-		"-run_proj",
-		"-project",
-		path,
-	)
-
-	cmd.Start()
 
 	return nil
 }

@@ -3,6 +3,7 @@ package hub_ui
 import (
 	"fmt"
 	"github.com/AllenDang/giu"
+	"goengine/engine/platform"
 	"goengine/settings"
 	"goengine/ui/scale"
 	"log"
@@ -12,6 +13,7 @@ var (
 	isSettingsReady          bool
 	isSettingsFailed         bool
 	isFontScalingInitialized bool
+	isPlatformInitialized    bool
 )
 
 func Loop() {
@@ -44,6 +46,10 @@ func Loop() {
 		scale.SetFontScale()
 
 		isFontScalingInitialized = true
+	}
+	if !isPlatformInitialized {
+		platform.Init()
+		isPlatformInitialized = true
 	}
 
 	giu.SingleWindow().

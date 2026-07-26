@@ -1,4 +1,4 @@
-package run_proj_ui
+package project_runner
 
 import (
 	"github.com/AllenDang/cimgui-go/imgui"
@@ -11,7 +11,7 @@ func Viewport() giu.Widget {
 
 	return giu.Child().
 		Border(false).
-		Size(ViewportWeght, ViewportHeight).Flags(
+		Size(-1, -1).Flags(
 		giu.WindowFlagsNoScrollbar |
 			giu.WindowFlagsNoScrollWithMouse).
 		Layout(

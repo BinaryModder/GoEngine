@@ -51,7 +51,7 @@ func MenuBar() giu.Widget {
 		//Middle Part
 		giu.Button("Run").OnClick(
 			func() {
-				if err := functions.RunProjectMenuBar(editor.EditState.ProjectPath); err != nil {
+				if err := functions.ProjectRunner(editor.EditState.ProjectPath); err != nil {
 					return
 				}
 			},

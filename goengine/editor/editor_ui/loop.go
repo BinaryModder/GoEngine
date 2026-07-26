@@ -3,6 +3,7 @@ package editor_ui
 import (
 	"github.com/AllenDang/giu"
 	"goengine/editor"
+	"goengine/engine/platform"
 	"goengine/engine/renderer"
 	"goengine/ui/scale"
 	"log"
@@ -12,6 +13,7 @@ var (
 	isFontScalingInitialized bool
 	isRendererInitialized    bool
 	isSizesConfigured        bool
+	isPlatformInitialized    bool
 )
 
 func Loop() {
@@ -40,6 +42,10 @@ func Loop() {
 			log.Fatalf("Failed to initialize renderer : %v", err)
 		}
 		isRendererInitialized = true
+	}
+	if !isPlatformInitialized {
+		platform.Init()
+		isPlatformInitialized = true
 	}
 
 	renderer.Render(&editor.EditState)

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/AllenDang/giu"
 	"goengine/hub"
-	"goengine/hub/errors"
 	"goengine/hub/functions"
+	"goengine/hub/validate"
 	"goengine/ui/scale"
 )
 
@@ -60,7 +60,7 @@ func CreateProjectView() giu.Widget {
 
 			giu.Button("Create").
 				OnClick(func() {
-					err := errors.ValidateNamePath()
+					err := validate.ValidateNamePath()
 					if err != nil {
 						hub.State.ErrorMessage = err.Error()
 						return
