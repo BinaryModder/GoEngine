@@ -1,13 +1,14 @@
 package project_runner
 
 import (
+	"fmt"
 	"github.com/AllenDang/cimgui-go/imgui"
 	"github.com/AllenDang/giu"
 	"goengine/editor"
+	"goengine/engine/console"
 	"goengine/engine/platform"
 	"goengine/engine/renderer"
 	"goengine/ui/scale"
-	"log"
 )
 
 var (
@@ -28,13 +29,17 @@ func Loop() {
 
 	if !isRendererInitialized {
 		if err := renderer.Init(int32(ViewportWeight), int32(ViewportHeight)); err != nil {
-			log.Fatalf("Failed to initialize renderer : %v", err)
+			console.State.Error(fmt.Sprint("Failed to initialize renderer : %v", err))
 		}
 		isRendererInitialized = true
+		console.State.Info("Renderer Succesfuly Initialized")
+
 	}
 	if !isPlatformInitialized {
 		platform.Init()
 		isPlatformInitialized = true
+		console.State.Info("Platform Succesfuly Initialized")
+
 	}
 
 	renderer.Render(&editor.RunProjState)
@@ -47,6 +52,8 @@ func Loop() {
 	giu.SingleWindow().
 		Layout(
 			Viewport(),
+			giu.Separator(),
+			Console(),
 		)
 
 }
