@@ -9,6 +9,6 @@ func Logo() giu.Widget {
 	return giu.Image(
 		Icon,
 	).Size(
-		scale.X(170), scale.Y(170),
+		scale.X(logoWidth), scale.Y(logoHeight),
 	)
 }

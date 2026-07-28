@@ -63,8 +63,8 @@ func projectCard(project project.Project) giu.Widget {
 
 	return giu.Child().
 		Size(
-			scale.X(775),
-			scale.Y(120),
+			scale.X(projectCardWeight),
+			scale.Y(projectCardHeight),
 		).Layout(
 		giu.Row(
 			giu.Column(

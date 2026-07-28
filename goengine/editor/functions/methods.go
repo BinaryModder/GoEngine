@@ -1,10 +1,10 @@
 package functions
 
 import (
+	"goengine/project"
 	"os"
 	"path/filepath"
-
-	"goengine/project"
+	"strings"
 )
 
 func LoadFolder(path string) ([]project.ProjectFile, string, error) {
@@ -37,6 +37,10 @@ func LoadFolder(path string) ([]project.ProjectFile, string, error) {
 					AmountFiles: len(contains),
 				})
 		} else {
+
+			if file.Name() == ".DS_Store" {
+				continue
+			}
 			projectFiles = append(projectFiles,
 
 				project.ProjectFile{
@@ -50,6 +54,38 @@ func LoadFolder(path string) ([]project.ProjectFile, string, error) {
 	}
 
 	return projectFiles, path, nil
+}
+
+func LoadScriptsNames(path string) ([]string, error) {
+	scripts_path := filepath.Join(
+		path,
+		"Assets",
+		"Scripts",
+	)
+	files, err := os.ReadDir(scripts_path)
+
+	if err != nil {
+		return []string{}, err
+	}
+	scriptFiles := make([]string, 0, len(files))
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
+		if !(filepath.Ext(file.Name()) == ".go") {
+			continue
+		}
+
+		scriptFiles = append(scriptFiles,
+			strings.TrimSuffix(file.Name(), ".go"),
+		)
+
+	}
+
+	return scriptFiles, nil
+
 }
 func AbsolutePath(path string) string {
 

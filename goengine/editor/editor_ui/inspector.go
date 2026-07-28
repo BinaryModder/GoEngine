@@ -4,7 +4,14 @@ import (
 	"fmt"
 	"github.com/AllenDang/giu"
 	"goengine/editor"
+	"goengine/editor/functions"
 	"goengine/scene"
+)
+
+var (
+	selectedScriptIndex int32
+	selectedScriptName  string
+	selectedObjectName  string
 )
 
 func Inspector() giu.Widget {
@@ -20,6 +27,7 @@ func Inspector() giu.Widget {
 		).Layout(widgets...)
 	}
 
+	//Object selections
 	var obj *scene.SceneObject
 	for i := range editor.EditState.CurrentScene.Objects {
 		if editor.EditState.CurrentScene.Objects[i].Name == editor.EditState.SelectedObject {
@@ -33,8 +41,25 @@ func Inspector() giu.Widget {
 		return giu.Child().Size(InspectorWidth, -ProjectHeight).Layout(widgets...)
 	}
 
+	//ScriptSelections
+
+	scriptsNameList, _ := functions.LoadScriptsNames(editor.EditState.ProjectPath)
+
+	if len(scriptsNameList) <= 0 {
+		scriptsNameList = []string{"No scripts found"}
+	}
+
 	widgets = append(widgets,
-		giu.Label(fmt.Sprintf("Name: %s", obj.Name)),
+		giu.Row(
+			giu.Label("Name: "),
+			giu.InputText(&selectedObjectName).Size(parameterInputNameObjectSize).Flags(
+				giu.InputTextFlagsEnterReturnsTrue,
+			).
+				OnChange(func() {
+					obj.Name = selectedObjectName
+					editor.EditState.SelectedObject = selectedObjectName
+				}),
+		),
 		giu.Label(fmt.Sprintf("Type: %s", obj.Type)),
 		giu.Separator(),
 	)
@@ -62,7 +87,15 @@ func Inspector() giu.Widget {
 			giu.InputFloat(&obj.Transform.Scale[1]).Label("Y##scl").Size(parameterInputSize),
 			giu.InputFloat(&obj.Transform.Scale[2]).Label("Z##scl").Size(parameterInputSize),
 		),
+
 		giu.Separator(),
+		giu.Label("Script"),
+		giu.Row(
+			giu.Combo("", selectedScriptName, scriptsNameList, &selectedScriptIndex).Size(200).
+				OnChange(func() {
+					selectedScriptName = scriptsNameList[selectedScriptIndex]
+				}),
+		),
 	)
 
 	if len(obj.Parameters) > 0 {

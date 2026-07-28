@@ -1,6 +1,7 @@
 package console
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -16,7 +17,7 @@ func (s *ConsoleState) Info(msg string) {
 		LogMessage{
 			Time:    time.Now(),
 			Type:    Info,
-			Message: msg,
+			Message: fmt.Sprintf("[INFO]: %s", msg),
 		})
 }
 
@@ -25,7 +26,7 @@ func (s *ConsoleState) Warning(msg string) {
 		LogMessage{
 			Time:    time.Now(),
 			Type:    Warning,
-			Message: msg,
+			Message: fmt.Sprintf("[WARNING]: %s", msg),
 		})
 }
 func (s *ConsoleState) Error(msg string) {
@@ -33,6 +34,6 @@ func (s *ConsoleState) Error(msg string) {
 		LogMessage{
 			Time:    time.Now(),
 			Type:    Error,
-			Message: msg,
+			Message: fmt.Sprintf("[ERROR]: %s", msg),
 		})
 }

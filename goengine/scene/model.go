@@ -18,6 +18,7 @@ type SceneObject struct {
 	Type      string    `json:"type"`
 	Transform Transform `json:"transform"`
 	MeshType  string    `json:"meshtype"`
+	Script    string    `json: "script"`
 
 	Parameters map[string]any `json:"parameters, omitempty"`
 }

@@ -9,8 +9,8 @@ import (
 func Sidebar() giu.Widget {
 	return giu.Child().
 		Size(
-			scale.X(220),
-			scale.Y(700)).
+			scale.X(sidebarWeight),
+			scale.Y(sidebarHeight)).
 		Layout(
 
 			giu.Label(

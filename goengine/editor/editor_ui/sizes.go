@@ -12,9 +12,10 @@ const (
 	ViewportHeight = 650
 	ProjectHeight  = 233
 
-	//widgets
-	parameterInputSize  = 60
-	parameterSliderSize = 80
+	//Inputs
+	parameterInputNameObjectSize = 150
+	parameterInputSize           = 60
+	parameterSliderSize          = 80
 
 	//Buttons
 
@@ -45,7 +46,7 @@ func ConfigureSize() {
 		toMiddleDummyHeight = 0
 
 	default:
-		toMiddleDummyWeight = 215
+		toMiddleDummyWeight = 350
 		toMiddleDummyHeight = 0
 	}
 }

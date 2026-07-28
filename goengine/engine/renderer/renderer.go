@@ -53,6 +53,7 @@ func Render(CurState editor.State) {
 
 	gl.UseProgram(gridProgram)
 
+	//camera
 	EditorCam.Update()
 
 	aspectRatio := float32(State.FrameBuffer.Width) / float32(State.FrameBuffer.Height)
