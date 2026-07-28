@@ -9,6 +9,7 @@ import (
 	"log"
 )
 
+// Some flags for Initializing
 var (
 	isSettingsReady          bool
 	isSettingsFailed         bool
@@ -16,7 +17,10 @@ var (
 	isPlatformInitialized    bool
 )
 
+// The centre of HUB Interface
 func Loop() {
+
+	//Loading Settings
 	if !isSettingsReady && !isSettingsFailed {
 
 		err := settings.LoadSettings()
@@ -34,6 +38,8 @@ func Loop() {
 		isSettingsReady = true
 
 	}
+
+	//Loading Assets
 	if !isAssetsLoaded {
 		if err := LoadTextures(); err != nil {
 			log.Fatal("Failed to load hub textures")
@@ -42,16 +48,21 @@ func Loop() {
 		isAssetsLoaded = true
 
 	}
+
+	//Loading Fonts
 	if !isFontScalingInitialized {
 		scale.SetFontScale()
 
 		isFontScalingInitialized = true
 	}
+
+	//Loading Platform Information
 	if !isPlatformInitialized {
 		platform.Init()
 		isPlatformInitialized = true
 	}
 
+	//Connecting all widgets
 	giu.SingleWindow().
 		Layout(
 

@@ -46,16 +46,20 @@ func CreateProject(
 
 	}
 
+	// Creating Project File
 	err := createProjFile(root, name)
 	if err != nil {
 		return err
 	}
+
+	// Creating Main.scene File
 
 	err = createScene(root)
 	if err != nil {
 		return err
 	}
 
+	// Saving this project to the UI as project card
 	saveNewProjectToList()
 
 	return nil

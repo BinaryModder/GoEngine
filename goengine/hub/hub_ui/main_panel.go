@@ -9,21 +9,24 @@ import (
 )
 
 var (
-	CurrentLogin           string
-	SaveSettingsShowButton bool
+	CurrentLogin           string // var for user login changing
+	SaveSettingsShowButton bool   // State for "Save" button
 )
 
 func MainPanel() giu.Widget {
 	widgets := []giu.Widget{}
 
 	switch hub.State.CurrentPage {
-	case hub.PageProjects:
+
+	case hub.PageProjects: // Page of Projects
 
 		widgets = append(
 			widgets, giu.Separator(), ProjectsView(),
 		)
-	case hub.PageSettings:
-		if isSettingsFailed {
+
+	case hub.PageSettings: // Page of Settings
+
+		if isSettingsFailed { // If loading settings data is failed
 			widgets = append(widgets,
 				giu.Label("Failed to create configuration file"),
 			)
@@ -44,7 +47,7 @@ func MainPanel() giu.Widget {
 			),
 			giu.Row(
 				giu.Label("Theme: "),
-				giu.Label(settings.State.Theme),
+				giu.Label(settings.State.Theme), // It does not work but could soon
 			),
 		)
 
@@ -67,6 +70,7 @@ func MainPanel() giu.Widget {
 
 	return giu.Child().
 		Size(
+
 			scale.X(mainpanelWidth),
 			scale.Y(mainpanelHeight),
 		).

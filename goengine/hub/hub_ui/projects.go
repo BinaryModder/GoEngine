@@ -9,6 +9,7 @@ import (
 	"goengine/ui/scale"
 )
 
+// Project part of interface (project cards , "New" , "Load")
 func ProjectsView() giu.Widget {
 
 	widgets := []giu.Widget{

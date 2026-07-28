@@ -5,6 +5,7 @@ import (
 	"goengine/editor"
 )
 
+// Left side of editor (List of scene objects)
 func Hierarchy() giu.Widget {
 
 	widgets := []giu.Widget{

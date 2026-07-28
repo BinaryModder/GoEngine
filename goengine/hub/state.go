@@ -7,22 +7,22 @@ import (
 type Page int
 
 const (
-	PageProjects Page = iota
-	PageSettings
+	PageProjects Page = iota //0
+	PageSettings             //1
 )
 
 type HubState struct {
 	ShowCreateProject bool
 
-	CurrentPage Page
+	CurrentPage Page // Current Page on Interface (for switching)
 
-	Projects []project.Project
+	Projects []project.Project // List of loaded project (for project cards)
 
-	NewCreateName string
+	NewCreateName string // Creating project part. Just storing name of new project (from InputText)
 
-	NewCreatePath string
+	NewCreatePath string // Creating project part. Just storing  of new project(from InputText)
 
-	ErrorMessage string
+	ErrorMessage string //Should show error information
 }
 
 var (

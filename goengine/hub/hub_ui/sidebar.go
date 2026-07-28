@@ -6,6 +6,7 @@ import (
 	"goengine/ui/scale"
 )
 
+// Left sidebar
 func Sidebar() giu.Widget {
 	return giu.Child().
 		Size(
@@ -24,7 +25,7 @@ func Sidebar() giu.Widget {
 			).
 				OnClick(func() {
 
-					hub.State.CurrentPage = hub.PageProjects
+					hub.State.CurrentPage = hub.PageProjects //Changing current page
 
 				}),
 
@@ -33,7 +34,7 @@ func Sidebar() giu.Widget {
 			).
 				OnClick(func() {
 
-					hub.State.CurrentPage = hub.PageSettings
+					hub.State.CurrentPage = hub.PageSettings //Changing current page
 				}),
 			giu.Dummy(0, scale.Y(350)),
 			Logo(),

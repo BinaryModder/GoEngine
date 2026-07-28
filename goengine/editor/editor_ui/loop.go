@@ -9,6 +9,7 @@ import (
 	"log"
 )
 
+// Some flags for Initializing
 var (
 	isFontScalingInitialized bool
 	isRendererInitialized    bool
@@ -16,8 +17,10 @@ var (
 	isPlatformInitialized    bool
 )
 
+// The centre of Editor Interface
 func Loop() {
 
+	//Loading Font
 	if !isFontScalingInitialized {
 		scale.SetFontScale()
 
@@ -25,11 +28,14 @@ func Loop() {
 
 	}
 
+	//Configuring sizes
 	if !isSizesConfigured {
 		ConfigureSize()
 
 		isSizesConfigured = true
 	}
+
+	//All Textures loading
 	if !EditorTextures.IsAssetsLoaded {
 		if err := LoadTextures(); err != nil {
 			log.Fatalf("Failed to load editor textures : %v", err)
@@ -37,6 +43,8 @@ func Loop() {
 
 		EditorTextures.IsAssetsLoaded = true
 	}
+
+	//Render Initilizing
 	if !isRendererInitialized {
 		if err := renderer.Init(int32(ViewportWidth), int32(ViewportHeight)); err != nil {
 			log.Fatalf("Failed to initialize renderer : %v", err)
@@ -48,8 +56,9 @@ func Loop() {
 		isPlatformInitialized = true
 	}
 
-	renderer.Render(&editor.EditState)
+	renderer.Render(&editor.EditState) // Render with Editor mode
 
+	//Connecting all widgets
 	giu.SingleWindow().Layout(
 		MenuBar(),
 		giu.Separator(),

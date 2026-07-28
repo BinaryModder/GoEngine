@@ -5,6 +5,7 @@ import (
 	"goengine/ui/scale"
 )
 
+// Goofer logo
 func Logo() giu.Widget {
 	return giu.Image(
 		Icon,

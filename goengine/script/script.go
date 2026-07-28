@@ -1,5 +1,6 @@
 package script
 
+// File for script
 import (
 	"goengine/scene"
 )
