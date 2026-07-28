@@ -1,4 +1,4 @@
-package project_runner
+package runtime
 
 import (
 	"github.com/AllenDang/cimgui-go/imgui"

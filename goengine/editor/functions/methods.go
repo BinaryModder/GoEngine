@@ -2,6 +2,7 @@ package functions
 
 import (
 	"goengine/project"
+	"goengine/scene"
 	"os"
 	"path/filepath"
 	"strings"
@@ -56,7 +57,7 @@ func LoadFolder(path string) ([]project.ProjectFile, string, error) {
 	return projectFiles, path, nil
 }
 
-func LoadScriptsNames(path string) ([]string, error) {
+func LoadScriptsNames(path string) []string {
 	scripts_path := filepath.Join(
 		path,
 		"Assets",
@@ -65,9 +66,10 @@ func LoadScriptsNames(path string) ([]string, error) {
 	files, err := os.ReadDir(scripts_path)
 
 	if err != nil {
-		return []string{}, err
+		return []string{}
 	}
 	scriptFiles := make([]string, 0, len(files))
+	scriptFiles = append(scriptFiles, "No script")
 
 	for _, file := range files {
 		if file.IsDir() {
@@ -84,7 +86,7 @@ func LoadScriptsNames(path string) ([]string, error) {
 
 	}
 
-	return scriptFiles, nil
+	return scriptFiles
 
 }
 func AbsolutePath(path string) string {
@@ -96,5 +98,16 @@ func AbsolutePath(path string) string {
 	}
 
 	return abs_path
+
+}
+
+func ContainsInArrayOfObjects(array *scene.Scene, word string) bool {
+	for _, obj := range array.Objects {
+		if obj.Name == word {
+			return true
+		}
+	}
+
+	return false
 
 }

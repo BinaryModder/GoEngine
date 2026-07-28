@@ -1,4 +1,4 @@
-package project_runner
+package runtime
 
 import (
 	"fmt"

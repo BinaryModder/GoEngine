@@ -30,7 +30,7 @@ func MenuBar() giu.Widget {
 			},
 		),
 
-		giu.Combo("", "SceneObj", []string{"Cube", "Pyramid", "Directional Light"}, &selectedObjectIndex).Size(120).
+		giu.Combo("", "SceneObj", []string{"Cube", "Pyramid", "Camera"}, &selectedObjectIndex).Size(120).
 			OnChange(func() {
 				if editor.EditState.CurrentScene == nil {
 					return

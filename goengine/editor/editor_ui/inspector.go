@@ -12,6 +12,7 @@ var (
 	selectedScriptIndex int32
 	selectedScriptName  string
 	selectedObjectName  string
+	scriptsNameList     []string
 )
 
 func Inspector() giu.Widget {
@@ -41,11 +42,19 @@ func Inspector() giu.Widget {
 		return giu.Child().Size(InspectorWidth, -ProjectHeight).Layout(widgets...)
 	}
 
+	selectedObjectName = obj.Name
+	if obj.Script != "" {
+		selectedScriptName = obj.Script
+	} else {
+
+		selectedScriptName = "No script"
+	}
+
 	//ScriptSelections
 
-	scriptsNameList, _ := functions.LoadScriptsNames(editor.EditState.ProjectPath)
+	scriptsNameList = functions.LoadScriptsNames(editor.EditState.ProjectPath)
 
-	if len(scriptsNameList) <= 0 {
+	if len(scriptsNameList) <= 1 {
 		scriptsNameList = []string{"No scripts found"}
 	}
 
@@ -56,6 +65,12 @@ func Inspector() giu.Widget {
 				giu.InputTextFlagsEnterReturnsTrue,
 			).
 				OnChange(func() {
+
+					contains := functions.ContainsInArrayOfObjects(editor.EditState.CurrentScene, selectedObjectName)
+
+					if contains {
+						return
+					}
 					obj.Name = selectedObjectName
 					editor.EditState.SelectedObject = selectedObjectName
 				}),
@@ -93,6 +108,8 @@ func Inspector() giu.Widget {
 		giu.Row(
 			giu.Combo("", selectedScriptName, scriptsNameList, &selectedScriptIndex).Size(200).
 				OnChange(func() {
+
+					obj.Script = scriptsNameList[selectedScriptIndex]
 					selectedScriptName = scriptsNameList[selectedScriptIndex]
 				}),
 		),
