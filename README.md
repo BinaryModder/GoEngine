@@ -68,7 +68,7 @@ GoEngine demonstrates that a modern 3D engine can be built using **only Go**.
 Run a project:
 
 ```bash
-go run main.go 
+go run ./cmd/main.go 
 ```
 
 ---
@@ -76,7 +76,7 @@ go run main.go
 Run the editor:
 
 ```bash
-go run main.go -editor -project <ProjectPath>
+go run ./cmd/main.go -editor -project <ProjectPath>
 ```
 
 ---

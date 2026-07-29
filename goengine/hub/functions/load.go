@@ -3,6 +3,7 @@ package functions
 import (
 	"encoding/json"
 	"github.com/sqweek/dialog"
+	"goengine/core/filesystem"
 	"goengine/project"
 	"os"
 	"path/filepath"
@@ -33,7 +34,7 @@ func LoadProject() (project.Project, error) {
 // Reading the information of choosed project folder
 func readProject(path string) (project.Project, error) {
 
-	absPath := AbsolutePath(path)
+	absPath := filesystem.AbsolutePath(path)
 
 	projectFile := filepath.Join(
 		absPath,
