@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/AllenDang/giu"
 	"goengine/engine/platform"
-	"goengine/settings"
+	"goengine/io/loader"
+	"goengine/io/saver"
 	"goengine/ui/scale"
 	"log"
 )
@@ -23,11 +24,11 @@ func Loop() {
 	//Loading Settings
 	if !isSettingsReady && !isSettingsFailed {
 
-		err := settings.LoadSettings()
+		err := loader.LoadSettings()
 
 		if err != nil {
 			if err.Error() == "Settings file does not exists" {
-				if err = settings.CreateSettings(); err != nil {
+				if err = saver.CreateSettings(); err != nil {
 					isSettingsFailed = true
 					fmt.Println("Failed to create settings.json")
 				}
@@ -42,7 +43,7 @@ func Loop() {
 	//Loading Assets
 	if !isAssetsLoaded {
 		if err := LoadTextures(); err != nil {
-			log.Fatal("Failed to load hub textures")
+			log.Fatalf("Failed to load hub textures: %v", err)
 		}
 
 		isAssetsLoaded = true

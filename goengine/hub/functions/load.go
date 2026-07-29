@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Loading exists project
 func LoadProject() (project.Project, error) {
 
 	path, err := dialog.Directory().
@@ -29,6 +30,7 @@ func LoadProject() (project.Project, error) {
 
 }
 
+// Reading the information of choosed project folder
 func readProject(path string) (project.Project, error) {
 
 	absPath := AbsolutePath(path)

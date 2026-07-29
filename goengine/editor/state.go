@@ -1,14 +1,11 @@
 package editor
 
 import (
+	"goengine/io/loader"
 	"goengine/project"
 	"goengine/scene"
 )
 
-type State interface {
-	GetProjectPath() string
-	GetProjectScene() *scene.Scene
-}
 type EditorState struct {
 	ProjectPath string
 
@@ -22,9 +19,40 @@ type EditorState struct {
 
 	SelectedObject string
 
+	Materials []scene.Material
+
 	ErrorState string
 
 	DefaultAssetsFolder string
+}
+
+func (s *EditorState) Init() error {
+	scene, err := loader.LoadScene(State.ProjectPath)
+	if err != nil {
+		return err
+	}
+
+	State.CurrentScene = scene
+
+	projectConfig, err := loader.LoadProjectConfig(State.ProjectPath)
+
+	if err != nil {
+		return err
+	}
+	State.ProjectConfig = projectConfig
+
+	projectFiles, assetsPath, err := loader.LoadProjectFiles(State.ProjectPath)
+
+	if err != nil {
+		return err
+	}
+
+	State.DefaultAssetsFolder = assetsPath
+	State.CurrentAssetsFolder = assetsPath
+	State.ProjectFiles = projectFiles
+
+	return nil
+
 }
 
 func (s *EditorState) GetProjectPath() string {
@@ -33,19 +61,3 @@ func (s *EditorState) GetProjectPath() string {
 func (s *EditorState) GetProjectScene() *scene.Scene {
 	return s.CurrentScene
 }
-
-type RunProjectState struct {
-	ProjectPath   string
-	CurrentScene  *scene.Scene
-	ProjectConfig *project.ProjectConfig
-}
-
-func (s *RunProjectState) GetProjectPath() string {
-	return s.ProjectPath
-}
-func (s *RunProjectState) GetProjectScene() *scene.Scene {
-	return s.CurrentScene
-}
-
-var EditState EditorState
-var RunProjState RunProjectState

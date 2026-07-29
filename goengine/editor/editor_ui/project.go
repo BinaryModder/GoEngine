@@ -5,8 +5,8 @@ import (
 
 	"github.com/AllenDang/giu"
 
+	"goengine/core/filesystem"
 	"goengine/editor"
-	"goengine/editor/functions"
 )
 
 const columns = 13
@@ -15,16 +15,16 @@ func Project() giu.Widget {
 
 	layout := giu.Layout{
 
-		giu.Label(editor.EditState.ProjectConfig.Name),
+		giu.Label(editor.State.ProjectConfig.Name),
 		giu.Separator(),
 	}
 
 	rootAssets := filepath.Join(
-		editor.EditState.ProjectPath,
+		editor.State.ProjectPath,
 		"Assets",
 	)
 
-	if editor.EditState.CurrentAssetsFolder != rootAssets {
+	if editor.State.CurrentAssetsFolder != rootAssets {
 
 		layout = append(layout,
 
@@ -32,18 +32,18 @@ func Project() giu.Widget {
 				OnClick(func() {
 
 					parent := filepath.Dir(
-						editor.EditState.CurrentAssetsFolder,
+						editor.State.CurrentAssetsFolder,
 					)
 
 					files, folder, err :=
-						functions.LoadFolder(parent)
+						filesystem.LoadFolder(parent)
 
 					if err != nil {
 						return
 					}
 
-					editor.EditState.ProjectFiles = files
-					editor.EditState.CurrentAssetsFolder = folder
+					editor.State.ProjectFiles = files
+					editor.State.CurrentAssetsFolder = folder
 				}),
 
 			giu.Separator(),
@@ -52,7 +52,7 @@ func Project() giu.Widget {
 
 	row := giu.Layout{}
 
-	for i, file := range editor.EditState.ProjectFiles {
+	for i, file := range editor.State.ProjectFiles {
 
 		f := file
 
@@ -80,14 +80,14 @@ func Project() giu.Widget {
 						}
 
 						files, folder, err :=
-							functions.LoadFolder(f.Path)
+							filesystem.LoadFolder(f.Path)
 
 						if err != nil {
 							return
 						}
 
-						editor.EditState.ProjectFiles = files
-						editor.EditState.CurrentAssetsFolder = folder
+						editor.State.ProjectFiles = files
+						editor.State.CurrentAssetsFolder = folder
 					}),
 
 				giu.Label(f.Name),

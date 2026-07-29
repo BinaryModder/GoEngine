@@ -50,9 +50,9 @@ func main() {
 			)
 		}
 
-		editor.EditState.ProjectPath = ProjectPath
+		editor.State.ProjectPath = ProjectPath
 
-		if err := editor.LoadEditorModeProject(); err != nil {
+		if err := editor.State.Init(); err != nil {
 			log.Fatal(err)
 		}
 
@@ -75,17 +75,17 @@ func main() {
 			)
 		}
 
-		editor.RunProjState.ProjectPath = ProjectPath
+		runtime.State.ProjectPath = ProjectPath
 
-		if err := editor.LoadRunModeProject(); err != nil {
+		if err := runtime.State.Init(); err != nil {
 			log.Fatal(err)
 		}
 
 		window := giu.NewMasterWindow(
 			fmt.Sprintf(
 				"Version: %s ; EngineVersion: %s",
-				editor.RunProjState.ProjectConfig.Version,
-				editor.RunProjState.ProjectConfig.EngineVersion,
+				runtime.State.ProjectConfig.Version,
+				runtime.State.ProjectConfig.EngineVersion,
 			),
 			1920,
 			1080,

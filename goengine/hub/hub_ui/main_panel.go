@@ -4,6 +4,7 @@ import (
 	"github.com/AllenDang/giu"
 
 	"goengine/hub"
+	"goengine/io/saver"
 	"goengine/settings"
 	"goengine/ui/scale"
 )
@@ -55,7 +56,7 @@ func MainPanel() giu.Widget {
 			widgets = append(widgets,
 				giu.Button("Save Setting").
 					OnClick(func() {
-						_ = settings.SaveSettings()
+						_ = saver.SaveSettings()
 						SaveSettingsShowButton = false
 					}),
 			)

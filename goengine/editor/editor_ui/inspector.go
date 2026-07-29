@@ -9,10 +9,18 @@ import (
 )
 
 var (
+	//Object Script
 	selectedScriptIndex int32
 	selectedScriptName  string
-	selectedObjectName  string
 	scriptsNameList     []string
+
+	//Object Name
+	selectedObjectName string
+
+	//Object Material
+	selectedMaterialIndex int32
+	selectedMaterial      *scene.Material
+	materialNamesList     []string
 )
 
 func Inspector() giu.Widget {
@@ -21,18 +29,17 @@ func Inspector() giu.Widget {
 		giu.Separator(),
 	}
 
-	if editor.EditState.CurrentScene == nil || editor.EditState.SelectedObject == "" {
+	if editor.State.CurrentScene == nil || editor.State.SelectedObject == "" {
 		widgets = append(widgets, giu.Label("No object selected"))
 		return giu.Child().Size(
 			InspectorWidth, -ProjectHeight,
 		).Layout(widgets...)
 	}
-
 	//Object selections
 	var obj *scene.SceneObject
-	for i := range editor.EditState.CurrentScene.Objects {
-		if editor.EditState.CurrentScene.Objects[i].Name == editor.EditState.SelectedObject {
-			obj = &editor.EditState.CurrentScene.Objects[i]
+	for i := range editor.State.CurrentScene.Objects {
+		if editor.State.CurrentScene.Objects[i].Name == editor.State.SelectedObject {
+			obj = &editor.State.CurrentScene.Objects[i]
 			break
 		}
 	}
@@ -42,21 +49,37 @@ func Inspector() giu.Widget {
 		return giu.Child().Size(InspectorWidth, -ProjectHeight).Layout(widgets...)
 	}
 
+	//Name object
 	selectedObjectName = obj.Name
+	//End of name object
+
+	// Script inspector initializing
 	if obj.Script != "" {
 		selectedScriptName = obj.Script
 	} else {
-
 		selectedScriptName = "No script"
 	}
 
-	//ScriptSelections
-
-	scriptsNameList = functions.LoadScriptsNames(editor.EditState.ProjectPath)
+	scriptsNameList = functions.LoadScriptsNames(editor.State.ProjectPath) // Loading script list for choosing
 
 	if len(scriptsNameList) <= 1 {
 		scriptsNameList = []string{"No scripts found"}
 	}
+	// End of script inspector initializing
+
+	//Material inspector initializing
+
+	if obj.Material != nil {
+		selectedMaterial = obj.Material
+	} else {
+		selectedMaterial = &scene.Material{
+			Name: "No material",
+		}
+	}
+
+	materialNamesList = functions.LoadMaterialsNames(&editor.State.Materials)
+
+	// End of material inspector initializing
 
 	widgets = append(widgets,
 		giu.Row(
@@ -66,13 +89,13 @@ func Inspector() giu.Widget {
 			).
 				OnChange(func() {
 
-					contains := functions.ContainsInArrayOfObjects(editor.EditState.CurrentScene, selectedObjectName)
+					contains := editor.State.CurrentScene.HasObject(selectedObjectName)
 
 					if contains {
 						return
 					}
 					obj.Name = selectedObjectName
-					editor.EditState.SelectedObject = selectedObjectName
+					editor.State.SelectedObject = selectedObjectName
 				}),
 		),
 		giu.Label(fmt.Sprintf("Type: %s", obj.Type)),
@@ -104,13 +127,25 @@ func Inspector() giu.Widget {
 		),
 
 		giu.Separator(),
+
 		giu.Label("Script"),
 		giu.Row(
 			giu.Combo("", selectedScriptName, scriptsNameList, &selectedScriptIndex).Size(200).
 				OnChange(func() {
-
+					// here could be func where we should give index of selected object
 					obj.Script = scriptsNameList[selectedScriptIndex]
 					selectedScriptName = scriptsNameList[selectedScriptIndex]
+				}),
+		),
+
+		giu.Separator(),
+
+		giu.Label("Material"),
+		giu.Row(
+			giu.Combo("", selectedMaterial.Name, materialNamesList, &selectedMaterialIndex).Size(200).
+				OnChange(func() {
+					// here could be func where we should give index of selected object
+					obj.Material = &editor.State.Materials[selectedMaterialIndex]
 				}),
 		),
 	)

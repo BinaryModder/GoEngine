@@ -7,14 +7,14 @@ import (
 )
 
 func ErrorMessage() giu.Widget {
-	show := editor.EditState.ErrorState != ""
+	show := editor.State.ErrorState != ""
 
 	return giu.Condition(
 		show,
 		giu.Child().Size(-1, 60).Border(true).Layout(
 			giu.Style().To(
 				giu.Row(
-					giu.Label(editor.EditState.ErrorState),
+					giu.Label(editor.State.ErrorState),
 				),
 			),
 		),

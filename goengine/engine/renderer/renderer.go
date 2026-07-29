@@ -3,7 +3,7 @@ package renderer
 import (
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
-	"goengine/editor"
+	"goengine/core/state"
 	"goengine/scene"
 )
 
@@ -19,7 +19,7 @@ var isPrimitivesInitialized bool
 
 var Scene *scene.Scene
 
-func Render(CurState editor.State) {
+func Render(CurState state.State) {
 
 	if CurState == nil {
 		return

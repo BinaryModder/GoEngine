@@ -19,6 +19,11 @@ var (
 
 // The centre of Editor Interface
 func Loop() {
+	//Platform information initializing
+	if !isPlatformInitialized {
+		platform.Init()
+		isPlatformInitialized = true
+	}
 
 	//Loading Font
 	if !isFontScalingInitialized {
@@ -51,12 +56,8 @@ func Loop() {
 		}
 		isRendererInitialized = true
 	}
-	if !isPlatformInitialized {
-		platform.Init()
-		isPlatformInitialized = true
-	}
 
-	renderer.Render(&editor.EditState) // Render with Editor mode
+	renderer.Render(&editor.State) // Render with Editor mode
 
 	//Connecting all widgets
 	giu.SingleWindow().Layout(

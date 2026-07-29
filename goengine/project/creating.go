@@ -1,19 +1,18 @@
-package functions
+package project
 
 import (
 	"encoding/json"
-	"goengine/hub"
-	"goengine/project"
 	"goengine/scene"
 	"os"
 	"path/filepath"
 	"time"
 )
 
+// Creating new GoEngine Project with default parameters
 func CreateProject(
 	name string,
 	location string,
-) error {
+) (*Project, error) {
 
 	root :=
 		filepath.Join(
@@ -41,7 +40,7 @@ func CreateProject(
 		)
 
 		if err != nil {
-			return err
+			return nil, err
 		}
 
 	}
@@ -49,20 +48,26 @@ func CreateProject(
 	// Creating Project File
 	err := createProjFile(root, name)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Creating Main.scene File
 
 	err = createScene(root)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	// Saving this project to the UI as project card
-	saveNewProjectToList()
-
-	return nil
+	filePath := filepath.Join(
+		location,
+		name,
+	)
+	return &Project{
+		Name:       name,
+		Path:       filePath,
+		CreatedAt:  time.Now(),
+		LastOpened: time.Now(),
+	}, nil
 
 }
 func createProjFile(
@@ -70,7 +75,7 @@ func createProjFile(
 	name string,
 ) error {
 
-	config := project.ProjectConfig{
+	config := ProjectConfig{
 
 		Name: name,
 
@@ -110,7 +115,6 @@ func createProjFile(
 	)
 
 }
-
 func createScene(root string) error {
 
 	sceneData := CreateDefaultScene()
@@ -130,20 +134,6 @@ func createScene(root string) error {
 		data,
 		0644,
 	)
-}
-
-func saveNewProjectToList() {
-
-	hub.State.Projects = append(
-		hub.State.Projects,
-		project.Project{
-			Name:       hub.State.NewCreateName,
-			Path:       filepath.Join(AbsolutePath(hub.State.NewCreatePath), hub.State.NewCreateName),
-			CreatedAt:  time.Now(),
-			LastOpened: time.Now(),
-		},
-	)
-
 }
 func CreateDefaultScene() *scene.Scene {
 	newScene := &scene.Scene{

@@ -2,7 +2,7 @@ package editor_ui
 
 import (
 	"github.com/AllenDang/giu"
-	"goengine/editor/functions"
+	"goengine/core/filesystem"
 	"goengine/ui/resources"
 	"os"
 	"path/filepath"
@@ -21,7 +21,7 @@ var (
 )
 
 func LoadTextures() error {
-	path := functions.AbsolutePath("ui/resources/editor")
+	path := filesystem.AbsolutePath("ui/resources/editor")
 
 	files, err := os.ReadDir(path)
 

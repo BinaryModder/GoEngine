@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/AllenDang/cimgui-go/imgui"
 	"github.com/AllenDang/giu"
-	"goengine/editor"
 	"goengine/engine/console"
 	"goengine/engine/platform"
 	"goengine/engine/renderer"
@@ -42,7 +41,7 @@ func Loop() {
 
 	}
 
-	renderer.Render(&editor.RunProjState)
+	renderer.Render(&State)
 	imgui.PushStyleVarVec2(
 		imgui.StyleVarWindowPadding,
 		imgui.Vec2{X: 0, Y: 0},

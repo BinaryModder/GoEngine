@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/sqweek/dialog"
 	"goengine/engine/platform"
+	"goengine/io/saver"
 	"goengine/scene"
 	"os/exec"
 	"path/filepath"
@@ -51,7 +52,7 @@ func SaveMenuBar(scene *scene.Scene, path string) error {
 		"Scenes",
 		"Main.scene",
 	)
-	if err := scene.SaveToFile(savePath); err != nil {
+	if err := saver.SaveToFile(scene, savePath); err != nil {
 		return errors.New("Failed to save scene")
 	}
 

@@ -6,7 +6,6 @@ require (
 	github.com/AllenDang/cimgui-go v1.3.2-0.20250409185506-6b2ff1aa26b5
 	github.com/AllenDang/giu v0.14.1
 	github.com/go-gl/gl v0.0.0-20260331235117-4566fea9a276
-	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20260707082822-2a407d02d01a
 	github.com/go-gl/mathgl v1.2.0
 	github.com/sqweek/dialog v0.0.0-20260123140253-64c163d53aac
 )

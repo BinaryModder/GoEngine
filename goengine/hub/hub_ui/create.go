@@ -6,6 +6,7 @@ import (
 	"goengine/hub"
 	"goengine/hub/functions"
 	"goengine/hub/validate"
+	"goengine/project"
 	"goengine/ui/scale"
 )
 
@@ -66,7 +67,7 @@ func CreateProjectView() giu.Widget {
 						return
 					}
 
-					err = functions.CreateProject(
+					newProject, err := project.CreateProject(
 						hub.State.NewCreateName,
 						hub.State.NewCreatePath,
 					)
@@ -74,6 +75,7 @@ func CreateProjectView() giu.Widget {
 					if err == nil {
 
 						hub.State.ShowCreateProject = false
+						hub.State.Projects = append(hub.State.Projects, *newProject)
 
 					} else {
 						fmt.Println(err)

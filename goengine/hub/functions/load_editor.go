@@ -6,6 +6,7 @@ import (
 	"os/exec"
 )
 
+// Running editor mode
 func OpenEditor(path string) {
 
 	exePath, err := os.Executable()

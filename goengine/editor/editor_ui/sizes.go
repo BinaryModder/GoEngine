@@ -42,11 +42,11 @@ func ConfigureSize() {
 	switch {
 	case s.CurrentScaling == s.ScalingOther:
 
-		toMiddleDummyWeight = 450.5
+		toMiddleDummyWeight = 330.5
 		toMiddleDummyHeight = 0
 
 	default:
-		toMiddleDummyWeight = 350
+		toMiddleDummyWeight = 230
 		toMiddleDummyHeight = 0
 	}
 }

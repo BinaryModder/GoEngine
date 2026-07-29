@@ -7,6 +7,7 @@ import (
 
 const pathSize int = 38
 
+// Returns absolute path of current path
 func AbsolutePath(path string) string {
 
 	abs_path, err := filepath.Abs(path)
@@ -19,6 +20,7 @@ func AbsolutePath(path string) string {
 
 }
 
+// If absolute path is too long , this function should make it like (.../ProjectFolder/ProjectName)
 func ConfigureLabelPath(path string) string {
 	if len(path) <= pathSize {
 		return path
@@ -27,6 +29,8 @@ func ConfigureLabelPath(path string) string {
 	return "..." + path[len(path)-pathSize:]
 
 }
+
+// Choosing project folder dialog
 func ChooseFolder() (string, error) {
 
 	folder, err := dialog.Directory().Title("Choose Project path").Browse()
