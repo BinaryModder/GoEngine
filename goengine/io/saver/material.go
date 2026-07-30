@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-func WriteMaterialFile(path, name, albedo string) error {
+func WriteMaterialFile(name, albedo, projectPath string) (*scene.Material, error) {
 
 	if name == "" {
 		name = "default"
@@ -17,7 +17,7 @@ func WriteMaterialFile(path, name, albedo string) error {
 		albedo = "null"
 	}
 	materialFolder := filepath.Join(
-		path,
+		projectPath,
 		"Assets",
 		"Materials",
 	)
@@ -32,14 +32,14 @@ func WriteMaterialFile(path, name, albedo string) error {
 	fileData, err := json.MarshalIndent(material, "", "    ")
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 	filePath := filepath.Join(
 		materialFolder,
 		fmt.Sprintf("%s.material", name),
 	)
 
-	return os.WriteFile(
+	return &material, os.WriteFile(
 		filePath,
 		fileData, 0644)
 

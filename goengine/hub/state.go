@@ -22,6 +22,8 @@ type HubState struct {
 
 	NewCreatePath string // Creating project part. Just storing  of new project(from InputText)
 
+	SaveSettingsShowButton bool // State for "Save" button
+
 	ErrorMessage string //Should show error information
 }
 

@@ -52,7 +52,7 @@ func LoadMaterialsNames(materials *[]scene.Material) []string {
 			cur_material.Name,
 		)
 	}
-	result_names = append(result_names, "Default")
+	result_names = append(result_names, "No material")
 
 	return result_names
 

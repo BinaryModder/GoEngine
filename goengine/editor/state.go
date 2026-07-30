@@ -24,6 +24,11 @@ type EditorState struct {
 	ErrorState string
 
 	DefaultAssetsFolder string
+
+	//Material creating states
+	ShowCreateMaterial    bool
+	NewMaterialName       string
+	NewMaterialSourcePath string
 }
 
 func (s *EditorState) Init() error {
@@ -50,6 +55,14 @@ func (s *EditorState) Init() error {
 	State.DefaultAssetsFolder = assetsPath
 	State.CurrentAssetsFolder = assetsPath
 	State.ProjectFiles = projectFiles
+
+	projectMaterials, err := loader.LoadProjectMaterials(State.ProjectPath)
+
+	if err != nil {
+		return err
+	}
+
+	State.Materials = projectMaterials
 
 	return nil
 

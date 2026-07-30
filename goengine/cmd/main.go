@@ -2,14 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"github.com/AllenDang/giu"
-	"goengine/editor"
-	"goengine/editor/editor_ui"
-	"goengine/hub/hub_ui"
-	"goengine/runtime"
-	"goengine/ui/scale"
-	"log"
+	editor_ui "goengine/editor/ui"
+	hub_ui "goengine/hub/ui"
+	runtime_ui "goengine/runtime/ui"
 )
 
 var (
@@ -28,9 +23,9 @@ func main() {
 
 	flag.BoolVar(
 		&RunMode,
-		"run_proj",
+		"runtime",
 		false,
-		"Run Project",
+		"Start runtime",
 	)
 
 	flag.StringVar(
@@ -39,75 +34,15 @@ func main() {
 		"",
 		"Project path",
 	)
-
 	flag.Parse()
-
 	if EditorMode {
-
-		if ProjectPath == "" {
-			log.Fatal(
-				"Project path is empty",
-			)
-		}
-
-		editor.State.ProjectPath = ProjectPath
-
-		if err := editor.State.Init(); err != nil {
-			log.Fatal(err)
-		}
-
-		window := giu.NewMasterWindow(
-			"GoEngine Editor",
-			1920,
-			1080,
-			0,
-		)
-		window.Run(
-			editor_ui.Loop,
-		)
-
+		editor_ui.Run(ProjectPath)
 	}
 	if RunMode {
-
-		if ProjectPath == "" {
-			log.Fatal(
-				"Project path is empty",
-			)
-		}
-
-		runtime.State.ProjectPath = ProjectPath
-
-		if err := runtime.State.Init(); err != nil {
-			log.Fatal(err)
-		}
-
-		window := giu.NewMasterWindow(
-			fmt.Sprintf(
-				"Version: %s ; EngineVersion: %s",
-				runtime.State.ProjectConfig.Version,
-				runtime.State.ProjectConfig.EngineVersion,
-			),
-			1920,
-			1080,
-			0,
-		)
-		window.Run(
-			runtime.Loop,
-		)
-
+		runtime_ui.Run(ProjectPath)
 	}
 	if !EditorMode && !RunMode {
-		window := giu.NewMasterWindow(
-			"GoEngine Hub",
-			scale.I(1150),
-			scale.I(725),
-			giu.MasterWindowFlagsNotResizable,
-		)
-
-		window.Run(
-			hub_ui.Loop,
-		)
-
+		hub_ui.Run()
 	}
 
 }
