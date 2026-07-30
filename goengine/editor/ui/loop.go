@@ -72,9 +72,7 @@ func Loop() {
 		),
 		giu.Separator(),
 		Project(),
-	)
 
-	if editor.State.ShowCreateMaterial {
-		CreateMaterialWindow()
-	}
+		CreateMaterialWindow(),
+	)
 }

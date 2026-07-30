@@ -1,108 +1,69 @@
 package ui
 
 import (
-	"fmt"
 	"github.com/AllenDang/giu"
 	"goengine/editor"
 	"goengine/io/dialog"
 	"goengine/io/saver"
-	"goengine/scene"
-	"goengine/ui/scale"
 )
 
 func CreateMaterialWindow() giu.Widget {
+	return giu.Custom(func() {
+		if editor.State.ShowCreateMaterial {
+			giu.OpenPopup("Create Material")
+			editor.State.ShowCreateMaterial = false
+		}
 
-	return giu.Child().
-		Size(
-			scale.X(400),
-			scale.Y(300)).
-		Border(true).
-		Layout(
+		giu.PopupModal("Create Material").
+			Flags(giu.WindowFlagsAlwaysAutoResize).
+			Layout(
 
-			giu.Label(
-				"Create new material",
-			),
+				giu.Label("Material name"),
 
-			giu.Separator(),
+				giu.InputText(&editor.State.NewMaterialName),
 
-			giu.Label(
-				"Material name",
-			),
+				giu.Label("Albedo(Path)"),
 
-			giu.InputText(
-				&editor.State.NewMaterialName,
-			),
+				giu.Row(
 
-			giu.Label(
-				"Location",
-			),
+					giu.InputText(&editor.State.NewMaterialSourcePath),
+					giu.Button("Browse").
+						OnClick(func() {
+							file, err := dialog.ChooseImageFile("Choose image")
+							if err != nil {
 
-			giu.Row(
+								//reset data
+								editor.State.NewMaterialName = ""
+								editor.State.NewMaterialSourcePath = ""
 
-				giu.InputText(
-					&editor.State.NewMaterialSourcePath,
+								return
+							}
+
+							editor.State.NewMaterialSourcePath = file
+
+						}),
 				),
 
-				giu.Button("Browse").
-					OnClick(func() {
+				giu.Row(
+					giu.Button("Create").OnClick(func() {
 
-						folder, err := dialog.ChooseFolder()
+						material, err := saver.WriteMaterialFile(
+							editor.State.NewMaterialName,
+							editor.State.NewMaterialSourcePath,
+							editor.State.ProjectPath,
+						)
 
-						if err != nil {
-							fmt.Println(err)
-							return
+						if err == nil {
+							giu.CloseCurrentPopup()
+							editor.State.Materials = append(editor.State.Materials, *material)
 						}
-						editor.State.NewMaterialSourcePath = folder
 
 					}),
-			),
 
-			giu.Separator(),
-
-			giu.Button("Create").
-				OnClick(func() {
-					err := scene.ValidateMaterialNamePath(editor.State.NewMaterialName, editor.State.NewMaterialSourcePath)
-					if err != nil {
-						return
-					}
-
-					newMaterial, err := saver.WriteMaterialFile(
-						editor.State.NewMaterialName,
-						editor.State.NewMaterialSourcePath,
-						editor.State.ProjectPath,
-					)
-
-					if err == nil {
-
-						editor.State.ShowCreateMaterial = false
-						editor.State.Materials = append(editor.State.Materials, *newMaterial)
-
-						//resets input data
-						editor.State.NewMaterialName = ""
-						editor.State.NewMaterialSourcePath = ""
-
-					} else {
-						//resets input data
-						editor.State.NewMaterialName = ""
-						editor.State.NewMaterialSourcePath = ""
-
-						//hiding creating window
-						editor.State.ShowCreateMaterial = false
-
-						fmt.Println(err)
-					}
-
-				}),
-
-			giu.Button("Cancel").
-				OnClick(func() {
-					//hiding creating window
-					editor.State.ShowCreateMaterial = false
-
-					//resets input data
-					editor.State.NewMaterialName = ""
-					editor.State.NewMaterialSourcePath = ""
-
-				}),
-		)
+					giu.Button("Cancel").OnClick(func() {
+						giu.CloseCurrentPopup()
+					}),
+				),
+			).Build()
+	})
 }

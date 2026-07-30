@@ -29,7 +29,7 @@ func Loop() {
 
 	if !isRendererInitialized {
 		if err := renderer.Init(int32(ViewportWeight), int32(ViewportHeight)); err != nil {
-			console.State.Error(fmt.Sprint("Failed to initialize renderer : %v", err))
+			console.State.Error(fmt.Sprintf("Failed to initialize renderer : %v", err))
 		}
 		isRendererInitialized = true
 		console.State.Info("Renderer Succesfuly Initialized")

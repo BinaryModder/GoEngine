@@ -9,7 +9,7 @@ import (
 
 func Run(ProjectPath string) error {
 	if ProjectPath == "" {
-		errors.New(
+		return errors.New(
 			"Project path is empty",
 		)
 	}

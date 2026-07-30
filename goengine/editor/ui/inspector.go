@@ -79,6 +79,15 @@ func Inspector() giu.Widget {
 
 	materialNamesList = functions.LoadMaterialsNames(&editor.State.Materials)
 
+	if obj.Material != nil && len(editor.State.Materials) > 0 {
+		for i, m := range editor.State.Materials {
+			if m.Name == obj.Material.Name {
+				selectedMaterialIndex = int32(i)
+				break
+			}
+		}
+	}
+
 	// End of material inspector initializing
 
 	widgets = append(widgets,
@@ -142,11 +151,12 @@ func Inspector() giu.Widget {
 
 		giu.Label("Material"),
 		giu.Row(
-			giu.Combo("", selectedMaterial.Name, materialNamesList, &selectedMaterialIndex).Size(200).
-				OnChange(func() {
-					// here could be func where we should give index of selected object
+		giu.Combo("", selectedMaterial.Name, materialNamesList, &selectedMaterialIndex).Size(200).
+			OnChange(func() {
+				if int(selectedMaterialIndex) < len(editor.State.Materials) {
 					obj.Material = &editor.State.Materials[selectedMaterialIndex]
-				}),
+				}
+			}),
 		),
 	)
 

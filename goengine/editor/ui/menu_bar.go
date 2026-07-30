@@ -47,11 +47,11 @@ func MenuBar() giu.Widget {
 		giu.Combo("", "Material", []string{"New material", "Load material"}, &selectedMaterialIndex).Size(120).
 			OnChange(func() {
 
-				switch selectedMaterialIndex {
-				case 0:
-					editor.State.ShowCreateMaterial = true
+		switch selectedMaterialIndex {
+			case 0:
+				editor.State.ShowCreateMaterial = true
 
-				case 1:
+			case 1:
 					//loading material
 				}
 

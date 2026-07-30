@@ -55,7 +55,11 @@ func LoadProjectMaterials(path string) ([]scene.Material, error) {
 	}
 
 	var file_path string
-	for index, file := range files {
+	var index int
+	for _, file := range files {
+		if file.IsDir() || filepath.Ext(file.Name()) != ".material" {
+			continue
+		}
 		file_path = filepath.Join(
 			materialsPath,
 			file.Name(),
@@ -65,6 +69,7 @@ func LoadProjectMaterials(path string) ([]scene.Material, error) {
 			return nil, err
 		}
 		material.Index = index
+		index++
 		result_materials = append(result_materials, *material)
 	}
 
