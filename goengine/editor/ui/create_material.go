@@ -32,6 +32,8 @@ func CreateMaterialWindow() giu.Widget {
 							file, err := dialog.ChooseImageFile("Choose image")
 							if err != nil {
 
+								editor.State.ShowCreateMaterial = false
+
 								//reset data
 								editor.State.NewMaterialName = ""
 								editor.State.NewMaterialSourcePath = ""
@@ -53,15 +55,25 @@ func CreateMaterialWindow() giu.Widget {
 							editor.State.ProjectPath,
 						)
 
-						if err == nil {
-							giu.CloseCurrentPopup()
-							editor.State.Materials = append(editor.State.Materials, *material)
+						if err != nil {
+							editor.State.ErrorState = err.Error()
+
 						}
+						giu.CloseCurrentPopup()
+						editor.State.Materials = append(editor.State.Materials, *material)
+
+						//reset data
+						editor.State.NewMaterialName = ""
+						editor.State.NewMaterialSourcePath = ""
 
 					}),
 
 					giu.Button("Cancel").OnClick(func() {
 						giu.CloseCurrentPopup()
+						//reset data
+						editor.State.NewMaterialName = ""
+						editor.State.NewMaterialSourcePath = ""
+
 					}),
 				),
 			).Build()

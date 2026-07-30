@@ -26,9 +26,15 @@ type EditorState struct {
 	DefaultAssetsFolder string
 
 	//Material creating states
-	ShowCreateMaterial    bool
+	ShowCreateMaterial bool
+
 	NewMaterialName       string
 	NewMaterialSourcePath string
+
+	//Loading material state
+	ShowLoadMaterial bool
+
+	LoadMaterialSourcePath string
 }
 
 func (s *EditorState) Init() error {

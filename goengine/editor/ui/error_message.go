@@ -3,21 +3,20 @@ package ui
 import (
 	"github.com/AllenDang/giu"
 
+	"fmt"
 	"goengine/editor"
 )
 
 func ErrorMessage() giu.Widget {
-	show := editor.State.ErrorState != ""
+	return giu.Custom(func() {
+		if editor.State.ErrorState != "" {
+			giu.OpenPopup("Error message")
+		}
 
-	return giu.Condition(
-		show,
-		giu.Child().Size(-1, 60).Border(true).Layout(
-			giu.Style().To(
-				giu.Row(
-					giu.Label(editor.State.ErrorState),
-				),
-			),
-		),
-		giu.Layout{},
-	)
+		giu.PopupModal("Error message").
+			Flags(giu.WindowFlagsAlwaysAutoResize).
+			Layout(
+				giu.Label(fmt.Sprintf("Error: %v", editor.State.ErrorState)),
+			).Build()
+	})
 }

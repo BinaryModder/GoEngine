@@ -49,7 +49,9 @@ func MenuBar() giu.Widget {
 					editor.State.ShowCreateMaterial = true
 
 				case 1:
-					//loading material
+
+					editor.State.ShowLoadMaterial = true
+
 				}
 
 			}),

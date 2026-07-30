@@ -64,7 +64,6 @@ func Loop() {
 		MenuBar(),
 		giu.Separator(),
 		giu.Row(
-			ErrorMessage(),
 
 			Hierarchy(),
 			Viewport(),
@@ -74,5 +73,7 @@ func Loop() {
 		Project(),
 
 		CreateMaterialWindow(),
+		LoadMaterialWindow(),
+		ErrorMessage(),
 	)
 }
