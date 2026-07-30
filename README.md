@@ -45,19 +45,34 @@ Unlike many engines that rely on C++, C#, or scripting languages for their core,
 
 ```text
 goengine/
-├── app/         # Launches the engine in Editor / Hub / Runtime mode as a subprocess
-├── cmd/         # CLI entry point (-editor, -runtime, -project)
-├── core/        # Core abstractions, state interfaces, filesystem utilities
-├── editor/      # Editor state and ImGui panels (Viewport, Inspector, Materials, etc.)
-├── engine/      # OpenGL 4.1 renderer, camera, shaders, primitives, platform detection
-├── hub/         # Project Hub (browse, create, and manage projects)
-├── io/          # JSON serialization, project assets, native file dialogs
-├── project/     # Project domain models (Project, ProjectConfig, ProjectFile)
-├── runtime/     # Play mode runtime and scene execution
-├── scene/       # Scene graph, transforms, objects, materials, primitives
-├── script/      # Script API (Start, Update, Destroy) and BaseScript
-├── settings/    # Global engine settings (theme, login, preferences)
-└── ui/          # Shared UI utilities (HiDPI scaling, textures, path helpers)
+├── app/           Launch engine binary in editor/hub/runtime mode as a subprocess
+├── cmd/           CLI entry point with flags: -editor, -runtime, -project
+├── core/          Core abstractions: State interface (project path + scene access),
+│                 filesystem helpers for folder traversal and absolute paths
+├── editor/        Editor mode: global EditorState (materials, scene, project files),
+│   ├── functions/   business logic for inspector, hierarchy, project browser
+│   └── ui/          ImGui panels: viewport, inspector, hierarchy, menu bar,
+│                    material create/load popups, project browser, error messages
+├── engine/        Engine subsystems:
+│   ├── renderer/    OpenGL 4.1: framebuffers, camera, shaders, primitives, textures
+│   ├── platform/    OS detection (Windows/macOS/Linux)
+│   └── console/     in-engine log console
+├── hub/           Project hub/launcher: browse recent projects, create new ones,
+│   └── ui/          paginated project cards, settings navigation
+├── io/            I/O layer:
+│   ├── loader/      JSON readers: scene, material, project config, settings
+│   ├── saver/       JSON writers: scene, material, project config
+│   └── dialog/      Native file/folder picker wrappers (sqweek/dialog)
+├── project/       Domain types: Project, ProjectConfig, ProjectFile;
+│                 scaffolding a new project + name/path validation
+├── runtime/       Play-in-editor mode: loads current scene + project config,
+│   └── ui/          live-rendering viewport
+├── scene/         Scene graph: SceneObject, Scene, Transform, Material;
+│                 factory primitives (cube, pyramid, sphere, plane); validation
+├── script/        Script lifecycle interface (Start, Update, Destroy);
+│                 BaseScript for user-defined behaviour
+├── settings/      Global engine settings (login, theme); json reading/writing
+└── ui/            Reusable utilities: HiDPI-aware scaling, PNG texture decoding
 ```
 
 ## Philosophy
