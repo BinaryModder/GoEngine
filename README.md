@@ -41,6 +41,25 @@ Unlike many engines that rely on C++, C#, or scripting languages for their core,
 
 ---
 
+## Project Structure
+
+```text
+goengine/
+├── app/         # Launches the engine in Editor / Hub / Runtime mode as a subprocess
+├── cmd/         # CLI entry point (-editor, -runtime, -project)
+├── core/        # Core abstractions, state interfaces, filesystem utilities
+├── editor/      # Editor state and ImGui panels (Viewport, Inspector, Materials, etc.)
+├── engine/      # OpenGL 4.1 renderer, camera, shaders, primitives, platform detection
+├── hub/         # Project Hub (browse, create, and manage projects)
+├── io/          # JSON serialization, project assets, native file dialogs
+├── project/     # Project domain models (Project, ProjectConfig, ProjectFile)
+├── runtime/     # Play mode runtime and scene execution
+├── scene/       # Scene graph, transforms, objects, materials, primitives
+├── script/      # Script API (Start, Update, Destroy) and BaseScript
+├── settings/    # Global engine settings (theme, login, preferences)
+└── ui/          # Shared UI utilities (HiDPI scaling, textures, path helpers)
+```
+
 ## Philosophy
 
 GoEngine is designed around a simple idea:
