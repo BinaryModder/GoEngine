@@ -3,6 +3,7 @@ package ui
 import (
 	"github.com/AllenDang/giu"
 	"goengine/editor"
+	"goengine/engine/logger"
 	"goengine/io/dialog"
 	"goengine/io/saver"
 )
@@ -38,10 +39,14 @@ func CreateMaterialWindow() giu.Widget {
 								editor.State.NewMaterialName = ""
 								editor.State.NewMaterialSourcePath = ""
 
+								logger.Error(err.Error())
+
 								return
 							}
 
 							editor.State.NewMaterialSourcePath = file
+
+							logger.Info("Image file found")
 
 						}),
 				),
@@ -56,7 +61,8 @@ func CreateMaterialWindow() giu.Widget {
 						)
 
 						if err != nil {
-							editor.State.ErrorState = err.Error()
+							logger.Error(err.Error())
+							return
 
 						}
 						giu.CloseCurrentPopup()
@@ -66,6 +72,8 @@ func CreateMaterialWindow() giu.Widget {
 						editor.State.NewMaterialName = ""
 						editor.State.NewMaterialSourcePath = ""
 
+						logger.Info("New .material file written")
+
 					}),
 
 					giu.Button("Cancel").OnClick(func() {
@@ -73,6 +81,8 @@ func CreateMaterialWindow() giu.Widget {
 						//reset data
 						editor.State.NewMaterialName = ""
 						editor.State.NewMaterialSourcePath = ""
+
+						logger.Error("Cancelled")
 
 					}),
 				),

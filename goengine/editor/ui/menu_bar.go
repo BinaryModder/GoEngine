@@ -5,6 +5,7 @@ import (
 	"goengine/app"
 	"goengine/editor"
 	"goengine/editor/functions"
+	"goengine/ui/layout"
 )
 
 func MenuBar() giu.Widget {
@@ -19,10 +20,10 @@ func MenuBar() giu.Widget {
 					return
 				}
 			},
-		).Size(saveeditSizeWeight, saveeditSizeHeight),
+		).Size(layout.SaveeditSizeWeight, layout.SaveeditSizeHeight),
 
 		giu.Button("Edit").
-			Size(saveeditSizeWeight, saveeditSizeHeight),
+			Size(layout.SaveeditSizeWeight, layout.SaveeditSizeHeight),
 
 		giu.Button("Assets").OnClick(
 			func() {
@@ -60,7 +61,7 @@ func MenuBar() giu.Widget {
 
 		giu.Button("Help"),
 
-		giu.Dummy(toMiddleDummyWeight, toMiddleDummyHeight),
+		giu.Dummy(layout.ToMiddleDummyWeight, layout.ToMiddleDummyHeight),
 
 		//Middle Part
 		giu.Button("Run").OnClick(
@@ -69,6 +70,6 @@ func MenuBar() giu.Widget {
 					return
 				}
 			},
-		).Size(runSizeWeight, runSizeHeight),
+		).Size(layout.RunSizeWeight, layout.RunSizeHeight),
 	)
 }

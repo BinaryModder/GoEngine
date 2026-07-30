@@ -7,6 +7,7 @@ import (
 
 	"goengine/core/filesystem"
 	"goengine/editor"
+	"goengine/editor/ui/assets"
 )
 
 const columns = 13
@@ -56,19 +57,19 @@ func Project() giu.Widget {
 
 		f := file
 
-		icon := EditorTextures.FileTexture
+		icon := assets.EditorTextures.FileTexture
 
 		if f.IsDir {
 			if f.AmountFiles != 0 {
-				icon = EditorTextures.FolderContainingTexture
+				icon = assets.EditorTextures.FolderContainingTexture
 			} else {
-				icon = EditorTextures.FolderEmptyTexture
+				icon = assets.EditorTextures.FolderEmptyTexture
 			}
 
 		}
 
 		card := giu.Child().
-			Size(folbutWeight, folbutHeight).
+			Size(125, 120).
 			Layout(
 
 				giu.ImageButton(icon).

@@ -3,6 +3,7 @@ package ui
 import (
 	"github.com/AllenDang/giu"
 	"goengine/editor"
+	"goengine/engine/logger"
 	"goengine/io/dialog"
 	"goengine/io/loader"
 	"goengine/io/saver"
@@ -32,10 +33,13 @@ func LoadMaterialWindow() giu.Widget {
 								editor.State.ShowLoadMaterial = false
 								//reset data
 								editor.State.LoadMaterialSourcePath = ""
+								logger.Error(err.Error())
 								return
 							}
 
 							editor.State.LoadMaterialSourcePath = file // write file
+
+							logger.Info(".material file found")
 
 						}),
 				),
@@ -46,11 +50,13 @@ func LoadMaterialWindow() giu.Widget {
 						material, err := loader.LoadMaterialFile(editor.State.LoadMaterialSourcePath)
 
 						if err != nil {
-							editor.State.ErrorState = err.Error()
+							logger.Error(err.Error())
 							giu.CloseCurrentPopup()
 							editor.State.LoadMaterialSourcePath = ""
 							return
 						}
+
+						logger.Info(".material file loaded")
 
 						giu.CloseCurrentPopup()
 						editor.State.Materials = append(editor.State.Materials, *material)
@@ -64,12 +70,18 @@ func LoadMaterialWindow() giu.Widget {
 							editor.State.ProjectPath,
 						)
 
+						if err != nil {
+							logger.Error(err.Error())
+						}
+						logger.Info(".material file writed")
+
 					}),
 
 					giu.Button("Cancel").OnClick(func() {
 						giu.CloseCurrentPopup()
 						//reset data
 						editor.State.LoadMaterialSourcePath = ""
+						logger.Error("Cancelled")
 
 					}),
 				),

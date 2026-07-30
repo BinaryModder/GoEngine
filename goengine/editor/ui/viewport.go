@@ -5,13 +5,14 @@ import (
 	"github.com/AllenDang/giu"
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"goengine/engine/renderer"
+	"goengine/ui/layout"
 )
 
 func Viewport() giu.Widget {
 
 	return giu.Child().
 		Border(false).
-		Size(-InspectorWidth, -ProjectHeight).Flags(
+		Size(-layout.InspectorWidth, -layout.ProjectHeight).Flags(
 		giu.WindowFlagsNoScrollbar |
 			giu.WindowFlagsNoScrollWithMouse).
 		Layout(

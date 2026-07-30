@@ -1,23 +1,12 @@
-package ui
+package loader
 
 import (
 	"github.com/AllenDang/giu"
 	"goengine/core/filesystem"
+	"goengine/editor/ui/assets"
 	"goengine/ui/resources"
 	"os"
 	"path/filepath"
-)
-
-type EditorTexture struct {
-	IsAssetsLoaded bool
-
-	FolderContainingTexture *giu.Texture
-	FolderEmptyTexture      *giu.Texture
-	FileTexture             *giu.Texture
-}
-
-var (
-	EditorTextures EditorTexture
 )
 
 func LoadTextures() error {
@@ -37,7 +26,7 @@ func LoadTextures() error {
 				"FolderEmptyIcon.png",
 			)
 			if err := resources.DecodeTextureFile(folder_icon_path, func(curr_texture *giu.Texture) {
-				EditorTextures.FolderEmptyTexture = curr_texture
+				assets.EditorTextures.FolderEmptyTexture = curr_texture
 
 			}); err != nil {
 				return err
@@ -52,7 +41,7 @@ func LoadTextures() error {
 			)
 
 			if err := resources.DecodeTextureFile(file_icon_path, func(curr_texture *giu.Texture) {
-				EditorTextures.FileTexture = curr_texture
+				assets.EditorTextures.FileTexture = curr_texture
 
 			}); err != nil {
 				return err
@@ -66,7 +55,7 @@ func LoadTextures() error {
 				"FolderContainingIcon.png",
 			)
 			if err := resources.DecodeTextureFile(folder_icon_path, func(curr_texture *giu.Texture) {
-				EditorTextures.FolderContainingTexture = curr_texture
+				assets.EditorTextures.FolderContainingTexture = curr_texture
 
 			}); err != nil {
 				return err

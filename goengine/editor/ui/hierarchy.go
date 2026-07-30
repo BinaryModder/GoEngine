@@ -3,6 +3,7 @@ package ui
 import (
 	"github.com/AllenDang/giu"
 	"goengine/editor"
+	"goengine/ui/layout"
 )
 
 // Left side of editor (List of scene objects)
@@ -47,6 +48,6 @@ func Hierarchy() giu.Widget {
 	}
 
 	return giu.Child().
-		Size(HierarchyWidth, -ProjectHeight).
+		Size(layout.HierarchyWidth, -layout.ProjectHeight).
 		Layout(widgets...)
 }

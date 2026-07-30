@@ -3,64 +3,40 @@ package ui
 import (
 	"fmt"
 	"github.com/AllenDang/giu"
-	"goengine/engine/platform"
-	"goengine/io/loader"
-	"goengine/io/saver"
+	"goengine/core/filesystem"
+	"goengine/engine/logger"
+	"goengine/hub/ui/loader"
 	"goengine/ui/scale"
-	"log"
 )
 
-// Some flags for Initializing
 var (
-	isSettingsReady          bool
-	isSettingsFailed         bool
-	isFontScalingInitialized bool
-	isPlatformInitialized    bool
+	isTextureLoaded bool
+	isFontScaled    bool
 )
 
 // The centre of HUB Interface
 func Loop() {
 
-	//Loading Settings
-	if !isSettingsReady && !isSettingsFailed {
+	// Loading Assets
+	if !isTextureLoaded {
 
-		err := loader.LoadSettings()
-
-		if err != nil {
-			if err.Error() == "Settings file does not exists" {
-				if err = saver.CreateSettings(); err != nil {
-					isSettingsFailed = true
-					fmt.Println("Failed to create settings.json")
-				}
-			}
-
+		icon_path := filesystem.AbsolutePath("ui/resources/hub/GoEngineIcon.png")
+		if err := loader.LoadTextures(icon_path); err != nil {
+			logger.Error(fmt.Sprintf("Failed to load hub textures: %v", err))
 		}
 
-		isSettingsReady = true
+		isTextureLoaded = true
+		logger.Info("Textures are loaded")
 
 	}
+	// Loading Fonts
 
-	//Loading Assets
-	if !isAssetsLoaded {
-		if err := LoadTextures(); err != nil {
-			log.Fatalf("Failed to load hub textures: %v", err)
-		}
-
-		isAssetsLoaded = true
-
-	}
-
-	//Loading Fonts
-	if !isFontScalingInitialized {
+	if !isFontScaled {
 		scale.SetFontScale()
 
-		isFontScalingInitialized = true
-	}
+		isFontScaled = true
+		logger.Info("Scaling is initialized")
 
-	//Loading Platform Information
-	if !isPlatformInitialized {
-		platform.Init()
-		isPlatformInitialized = true
 	}
 
 	//Connecting all widgets
@@ -73,4 +49,5 @@ func Loop() {
 			),
 		)
 
+	Console()
 }

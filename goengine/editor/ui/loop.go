@@ -3,62 +3,49 @@ package ui
 import (
 	"github.com/AllenDang/giu"
 	"goengine/editor"
-	"goengine/engine/platform"
+	"goengine/editor/ui/loader"
+	"goengine/engine/logger"
 	"goengine/engine/renderer"
+	"goengine/ui/layout"
 	"goengine/ui/scale"
-	"log"
 )
 
-// Some flags for Initializing
 var (
-	isFontScalingInitialized bool
-	isRendererInitialized    bool
-	isSizesConfigured        bool
-	isPlatformInitialized    bool
+	isTextureLoaded       bool
+	isFontScaled          bool
+	isRendererInitialized bool
 )
 
 // The centre of Editor Interface
 func Loop() {
-	//Platform information initializing
-	if !isPlatformInitialized {
-		platform.Init()
-		isPlatformInitialized = true
-	}
 
-	//Loading Font
-	if !isFontScalingInitialized {
-		scale.SetFontScale()
-
-		isFontScalingInitialized = true
-
-	}
-
-	//Configuring sizes
-	if !isSizesConfigured {
-		ConfigureSize()
-
-		isSizesConfigured = true
-	}
-
-	//All Textures loading
-	if !EditorTextures.IsAssetsLoaded {
-		if err := LoadTextures(); err != nil {
-			log.Fatalf("Failed to load editor textures : %v", err)
+	//Loading textures
+	if !isTextureLoaded {
+		if err := loader.LoadTextures(); err != nil {
+			logger.Error(err.Error())
 		}
-
-		EditorTextures.IsAssetsLoaded = true
+		isTextureLoaded = true
+		logger.Info("Textures are loaded")
 	}
 
-	//Render Initilizing
+	//Loading font
+	if !isFontScaled {
+		scale.SetFontScale()
+		isFontScaled = true
+		logger.Info("Font scale is ready")
+
+	}
+	//Render Initializing
 	if !isRendererInitialized {
-		if err := renderer.Init(int32(ViewportWidth), int32(ViewportHeight)); err != nil {
-			log.Fatalf("Failed to initialize renderer : %v", err)
+		if err := renderer.Init(int32(layout.ViewportWidth), int32(layout.ViewportHeight)); err != nil {
+			logger.Error(err.Error())
 		}
 		isRendererInitialized = true
+
+		logger.Info("Renderer is initialized. Render in process...")
+
 	}
-
 	renderer.Render(&editor.State) // Render with Editor mode
-
 	//Connecting all widgets
 	giu.SingleWindow().Layout(
 		MenuBar(),
@@ -74,6 +61,6 @@ func Loop() {
 
 		CreateMaterialWindow(),
 		LoadMaterialWindow(),
-		ErrorMessage(),
 	)
+	Console()
 }

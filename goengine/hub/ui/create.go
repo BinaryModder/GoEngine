@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 	"github.com/AllenDang/giu"
+	"goengine/engine/logger"
 	"goengine/hub"
 	"goengine/io/dialog"
 	"goengine/project"
@@ -48,10 +49,12 @@ func CreateProjectView() giu.Widget {
 						folder, err := dialog.ChooseFolder()
 
 						if err != nil {
-							fmt.Println(err)
+							logger.Error(fmt.Sprintf("Failed to load folder: %s", err))
 							return
 						}
+
 						hub.State.NewCreatePath = folder
+						logger.Info("Folder is found")
 
 					}),
 			),
@@ -65,7 +68,7 @@ func CreateProjectView() giu.Widget {
 						hub.State.NewCreatePath,
 					)
 					if err != nil {
-						hub.State.ErrorMessage = err.Error()
+						logger.Error(fmt.Sprintf("Failed to validate name and path: %s", err.Error()))
 						return
 					}
 
@@ -74,12 +77,7 @@ func CreateProjectView() giu.Widget {
 						hub.State.NewCreatePath,
 					)
 
-					if err == nil {
-
-						hub.State.ShowCreateProject = false
-						hub.State.Projects = append(hub.State.Projects, *newProject)
-
-					} else {
+					if err != nil {
 						//resets input data
 						hub.State.NewCreateName = ""
 						hub.State.NewCreatePath = ""
@@ -87,8 +85,13 @@ func CreateProjectView() giu.Widget {
 						//hiding creating window
 						hub.State.ShowCreateProject = false
 
-						fmt.Println(err)
+						logger.Error(fmt.Sprintf("Failed to create project: %s", err.Error()))
 					}
+
+					hub.State.ShowCreateProject = false
+					hub.State.Projects = append(hub.State.Projects, *newProject)
+
+					logger.Info("New project appended")
 
 				}),
 
@@ -100,6 +103,8 @@ func CreateProjectView() giu.Widget {
 					//resets input data
 					hub.State.NewCreateName = ""
 					hub.State.NewCreatePath = ""
+
+					logger.Error("Cancelled")
 
 				}),
 		)

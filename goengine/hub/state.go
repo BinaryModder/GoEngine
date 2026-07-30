@@ -1,7 +1,13 @@
 package hub
 
 import (
+	"fmt"
+	"goengine/engine/logger"
+	"goengine/engine/platform"
+	"goengine/io/loader"
+	"goengine/io/saver"
 	"goengine/project"
+	"goengine/settings"
 )
 
 type Page int
@@ -24,9 +30,33 @@ type HubState struct {
 
 	SaveSettingsShowButton bool // State for "Save" button
 
-	ErrorMessage string //Should show error information
+	//Settings
+	ShowConsole bool
 }
 
-var (
-	State HubState
-)
+func (s *HubState) Init() error {
+
+	// Loading settings
+	err := loader.LoadSettings()
+
+	if err != nil {
+		if err.Error() == "Settings file does not exists" {
+			if err = saver.CreateSettings(); err != nil {
+				logger.Warning("Failed to create settings.json")
+			}
+		}
+
+	}
+
+	State.ShowConsole = settings.State.Console
+
+	logger.Info("Settings are loaded")
+
+	//Loading Platform Information
+
+	platform.Init()
+
+	logger.Info(fmt.Sprintf("Platform is initialized: %s", platform.State.OS))
+
+	return nil
+}

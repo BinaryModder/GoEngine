@@ -3,8 +3,10 @@ package main
 import (
 	"flag"
 	editor_ui "goengine/editor/ui"
+	"goengine/engine/logger"
 	hub_ui "goengine/hub/ui"
 	runtime_ui "goengine/runtime/ui"
+	"log"
 )
 
 var (
@@ -14,6 +16,14 @@ var (
 )
 
 func main() {
+
+	if err := logger.Init(); err != nil {
+		log.Fatal(err)
+	}
+	defer logger.Sync()
+
+	logger.Info("GoEngine started")
+
 	flag.BoolVar(
 		&EditorMode,
 		"editor",

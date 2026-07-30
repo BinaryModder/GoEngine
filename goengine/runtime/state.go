@@ -10,6 +10,7 @@ type RuntimeState struct {
 	ProjectPath   string
 	CurrentScene  *scene.Scene
 	ProjectConfig *project.ProjectConfig
+	Materials     []scene.Material
 }
 
 func (s *RuntimeState) Init() error {
@@ -28,6 +29,14 @@ func (s *RuntimeState) Init() error {
 	}
 
 	State.ProjectConfig = projectConf
+
+	projectMaterials, err := loader.LoadProjectMaterials(State.ProjectPath)
+
+	if err != nil {
+		return nil
+	}
+
+	State.Materials = projectMaterials
 
 	return nil
 

@@ -1,9 +1,14 @@
 package editor
 
 import (
+	"fmt"
+	"goengine/engine/logger"
+	"goengine/engine/platform"
 	"goengine/io/loader"
 	"goengine/project"
 	"goengine/scene"
+	"goengine/settings"
+	"goengine/ui/layout"
 )
 
 type EditorState struct {
@@ -21,8 +26,6 @@ type EditorState struct {
 
 	Materials []scene.Material
 
-	ErrorState string
-
 	DefaultAssetsFolder string
 
 	//Material creating states
@@ -35,9 +38,21 @@ type EditorState struct {
 	ShowLoadMaterial bool
 
 	LoadMaterialSourcePath string
+
+	//Settings
+	ShowConsole bool
 }
 
 func (s *EditorState) Init() error {
+	//Platform information initializing
+	platform.Init()
+	logger.Info(fmt.Sprintf("Platform is initialized: %s", platform.State.OS))
+
+	//Configuring sizes
+	layout.ConfigureSize()
+	logger.Info("Sizes are configured")
+
+	// Scene initializing
 	scene, err := loader.LoadScene(State.ProjectPath)
 	if err != nil {
 		return err
@@ -45,12 +60,16 @@ func (s *EditorState) Init() error {
 
 	State.CurrentScene = scene
 
+	logger.Info("Scene is loaded")
+
 	projectConfig, err := loader.LoadProjectConfig(State.ProjectPath)
 
 	if err != nil {
 		return err
 	}
 	State.ProjectConfig = projectConfig
+
+	logger.Info("Project config is loaded")
 
 	projectFiles, assetsPath, err := loader.LoadProjectFiles(State.ProjectPath)
 
@@ -62,6 +81,8 @@ func (s *EditorState) Init() error {
 	State.CurrentAssetsFolder = assetsPath
 	State.ProjectFiles = projectFiles
 
+	logger.Info("Project files is loaded")
+
 	projectMaterials, err := loader.LoadProjectMaterials(State.ProjectPath)
 
 	if err != nil {
@@ -69,6 +90,16 @@ func (s *EditorState) Init() error {
 	}
 
 	State.Materials = projectMaterials
+
+	logger.Info("Materials are loaded")
+
+	if err = loader.LoadSettings(); err != nil {
+		return err
+	}
+
+	State.ShowConsole = settings.State.Console
+
+	logger.Info("Settings are loaded")
 
 	return nil
 

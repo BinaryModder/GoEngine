@@ -2,9 +2,10 @@ package ui
 
 import (
 	"errors"
-
+	"fmt"
 	"github.com/AllenDang/giu"
 	"goengine/editor"
+	"goengine/engine/logger"
 )
 
 func Run(ProjectPath string) error {
@@ -17,7 +18,7 @@ func Run(ProjectPath string) error {
 	editor.State.ProjectPath = ProjectPath
 
 	if err := editor.State.Init(); err != nil {
-		return err
+		logger.Error(fmt.Sprintf("Failed to initialize editor: %s", err))
 	}
 
 	window := giu.NewMasterWindow(

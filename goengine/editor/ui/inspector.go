@@ -6,6 +6,7 @@ import (
 	"goengine/editor"
 	"goengine/editor/functions"
 	"goengine/scene"
+	"goengine/ui/layout"
 )
 
 var (
@@ -32,7 +33,7 @@ func Inspector() giu.Widget {
 	if editor.State.CurrentScene == nil || editor.State.SelectedObject == "" {
 		widgets = append(widgets, giu.Label("No object selected"))
 		return giu.Child().Size(
-			InspectorWidth, -ProjectHeight,
+			layout.InspectorWidth, -layout.ProjectHeight,
 		).Layout(widgets...)
 	}
 	//Object selections
@@ -46,7 +47,7 @@ func Inspector() giu.Widget {
 
 	if obj == nil {
 		widgets = append(widgets, giu.Label("Object not found"))
-		return giu.Child().Size(InspectorWidth, -ProjectHeight).Layout(widgets...)
+		return giu.Child().Size(layout.InspectorWidth, -layout.ProjectHeight).Layout(widgets...)
 	}
 
 	//Name object
@@ -93,7 +94,7 @@ func Inspector() giu.Widget {
 	widgets = append(widgets,
 		giu.Row(
 			giu.Label("Name: "),
-			giu.InputText(&selectedObjectName).Size(parameterInputNameObjectSize).Flags(
+			giu.InputText(&selectedObjectName).Size(layout.ParameterInputNameObjectSize).Flags(
 				giu.InputTextFlagsEnterReturnsTrue,
 			).
 				OnChange(func() {
@@ -116,23 +117,23 @@ func Inspector() giu.Widget {
 
 		giu.Label("Position"),
 		giu.Row(
-			giu.InputFloat(&obj.Transform.Position[0]).Label("X##pos").Size(parameterInputSize),
-			giu.InputFloat(&obj.Transform.Position[1]).Label("Y##pos").Size(parameterInputSize),
-			giu.InputFloat(&obj.Transform.Position[2]).Label("Z##pos").Size(parameterInputSize),
+			giu.InputFloat(&obj.Transform.Position[0]).Label("X##pos").Size(layout.ParameterInputSize),
+			giu.InputFloat(&obj.Transform.Position[1]).Label("Y##pos").Size(layout.ParameterInputSize),
+			giu.InputFloat(&obj.Transform.Position[2]).Label("Z##pos").Size(layout.ParameterInputSize),
 		),
 
 		giu.Label("Rotation"),
 		giu.Row(
-			giu.InputFloat(&obj.Transform.Rotation[0]).Label("X##rot").Size(parameterInputSize),
-			giu.InputFloat(&obj.Transform.Rotation[1]).Label("Y##rot").Size(parameterInputSize),
-			giu.InputFloat(&obj.Transform.Rotation[2]).Label("Z##rot").Size(parameterInputSize),
+			giu.InputFloat(&obj.Transform.Rotation[0]).Label("X##rot").Size(layout.ParameterInputSize),
+			giu.InputFloat(&obj.Transform.Rotation[1]).Label("Y##rot").Size(layout.ParameterInputSize),
+			giu.InputFloat(&obj.Transform.Rotation[2]).Label("Z##rot").Size(layout.ParameterInputSize),
 		),
 
 		giu.Label("Scale"),
 		giu.Row(
-			giu.InputFloat(&obj.Transform.Scale[0]).Label("X##scl").Size(parameterInputSize),
-			giu.InputFloat(&obj.Transform.Scale[1]).Label("Y##scl").Size(parameterInputSize),
-			giu.InputFloat(&obj.Transform.Scale[2]).Label("Z##scl").Size(parameterInputSize),
+			giu.InputFloat(&obj.Transform.Scale[0]).Label("X##scl").Size(layout.ParameterInputSize),
+			giu.InputFloat(&obj.Transform.Scale[1]).Label("Y##scl").Size(layout.ParameterInputSize),
+			giu.InputFloat(&obj.Transform.Scale[2]).Label("Z##scl").Size(layout.ParameterInputSize),
 		),
 
 		giu.Separator(),
@@ -202,16 +203,16 @@ func Inspector() giu.Widget {
 					if valid {
 						widgets = append(widgets, giu.Label(key+" (RGB/XYZ)"))
 						widgets = append(widgets, giu.Row(
-							giu.SliderFloat(&vec[0], 0.0, 1.0).Label("X/R##v0_"+key).Size(parameterSliderSize).OnChange(func() {
+							giu.SliderFloat(&vec[0], 0.0, 1.0).Label("X/R##v0_"+key).Size(layout.ParameterSliderSize).OnChange(func() {
 								obj.Parameters[key] = []interface{}{float64(vec[0]), float64(vec[1]), float64(vec[2])}
 							}),
-							giu.SliderFloat(&vec[1], 0.0, 1.0).Label("Y/G##v1_"+key).Size(parameterSliderSize).OnChange(func() {
+							giu.SliderFloat(&vec[1], 0.0, 1.0).Label("Y/G##v1_"+key).Size(layout.ParameterSliderSize).OnChange(func() {
 								obj.Parameters[key] = []interface{}{float64(vec[0]), float64(vec[1]), float64(vec[2])}
 							}),
 						))
 						widgets = append(widgets,
 							giu.Row(
-								giu.SliderFloat(&vec[2], 0.0, 1.0).Label("Z/B##v2_"+key).Size(parameterSliderSize).OnChange(func() {
+								giu.SliderFloat(&vec[2], 0.0, 1.0).Label("Z/B##v2_"+key).Size(layout.ParameterSliderSize).OnChange(func() {
 									obj.Parameters[key] = []interface{}{float64(vec[0]), float64(vec[1]), float64(vec[2])}
 								}),
 							))
@@ -233,6 +234,6 @@ func Inspector() giu.Widget {
 	)
 
 	return giu.Child().
-		Size(InspectorWidth, -ProjectHeight).
+		Size(layout.InspectorWidth, -layout.ProjectHeight).
 		Layout(widgets...)
 }

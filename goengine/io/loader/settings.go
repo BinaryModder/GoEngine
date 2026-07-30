@@ -34,8 +34,9 @@ func LoadSettings() error {
 	}
 
 	settings.State = settings.GoEngineSettings{
-		Login: pure_data.Login,
-		Theme: pure_data.Theme,
+		Login:   pure_data.Login,
+		Theme:   pure_data.Theme,
+		Console: pure_data.Console,
 	}
 
 	return nil

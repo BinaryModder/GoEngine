@@ -3,6 +3,8 @@ package ui
 import (
 	"github.com/AllenDang/giu"
 
+	"fmt"
+	"goengine/engine/logger"
 	"goengine/hub"
 	"goengine/io/saver"
 	"goengine/settings"
@@ -26,12 +28,6 @@ func MainPanel() giu.Widget {
 
 	case hub.PageSettings: // Page of Settings
 
-		if isSettingsFailed { // If loading settings data is failed
-			widgets = append(widgets,
-				giu.Label("Failed to create configuration file"),
-			)
-		}
-
 		CurrentLogin = settings.State.Login
 
 		widgets = append(
@@ -49,14 +45,24 @@ func MainPanel() giu.Widget {
 				giu.Label("Theme: "),
 				giu.Label(settings.State.Theme), // It does not work but could soon
 			),
+			giu.Checkbox(
+				"GoEngine with console",
+				&settings.State.Console,
+			).OnChange(func() {
+				hub.State.SaveSettingsShowButton = true
+			}),
 		)
 
 		if hub.State.SaveSettingsShowButton {
 			widgets = append(widgets,
-				giu.Button("Save Setting").
+				giu.Button("Save Settings").
 					OnClick(func() {
-						_ = saver.SaveSettings()
+						if err := saver.SaveSettings(); err != nil {
+							logger.Error(fmt.Sprintf("Failed to save settins: %s", err.Error()))
+							return
+						}
 						hub.State.SaveSettingsShowButton = false
+						logger.Info("Settings saved")
 					}),
 			)
 		}
