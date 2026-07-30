@@ -34,9 +34,6 @@ func MenuBar() giu.Widget {
 
 		giu.Combo("", "SceneObj", []string{"Cube", "Pyramid", "Camera"}, &selectedObjectIndex).Size(120).
 			OnChange(func() {
-				if editor.State.CurrentScene == nil {
-					return
-				}
 
 				if err := functions.SceneObjectMenuBar(editor.State.CurrentScene, &selectedObjectIndex); err != nil {
 					return
@@ -47,11 +44,11 @@ func MenuBar() giu.Widget {
 		giu.Combo("", "Material", []string{"New material", "Load material"}, &selectedMaterialIndex).Size(120).
 			OnChange(func() {
 
-		switch selectedMaterialIndex {
-			case 0:
-				editor.State.ShowCreateMaterial = true
+				switch selectedMaterialIndex {
+				case 0:
+					editor.State.ShowCreateMaterial = true
 
-			case 1:
+				case 1:
 					//loading material
 				}
 

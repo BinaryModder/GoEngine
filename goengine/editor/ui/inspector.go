@@ -151,12 +151,12 @@ func Inspector() giu.Widget {
 
 		giu.Label("Material"),
 		giu.Row(
-		giu.Combo("", selectedMaterial.Name, materialNamesList, &selectedMaterialIndex).Size(200).
-			OnChange(func() {
-				if int(selectedMaterialIndex) < len(editor.State.Materials) {
-					obj.Material = &editor.State.Materials[selectedMaterialIndex]
-				}
-			}),
+			giu.Combo("", selectedMaterial.Name, materialNamesList, &selectedMaterialIndex).Size(200).
+				OnChange(func() {
+					if int(selectedMaterialIndex) < len(editor.State.Materials) {
+						obj.Material = &editor.State.Materials[selectedMaterialIndex]
+					}
+				}),
 		),
 	)
 
@@ -220,6 +220,17 @@ func Inspector() giu.Widget {
 			}
 		}
 	}
+
+	widgets = append(widgets,
+		giu.Button("Delete object").
+			Size(-1, 35).
+			OnClick(func() {
+				if err := editor.State.CurrentScene.DeleteSceneObject(editor.State.SelectedObject); err != nil {
+					return
+				}
+				editor.State.SelectedObject = ""
+			}),
+	)
 
 	return giu.Child().
 		Size(InspectorWidth, -ProjectHeight).

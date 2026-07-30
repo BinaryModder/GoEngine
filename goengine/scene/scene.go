@@ -31,11 +31,7 @@ func (s *Scene) AddSceneObjectToTheScene(sceneObject *SceneObject) error {
 
 	var flag bool
 
-	for _, obj := range s.Objects {
-		if obj.Name == sceneObject.Name {
-			flag = true
-		}
-	}
+	flag = s.HasObject(sceneObject.Name)
 
 	if flag {
 		return errors.New("Object with this name already exists")
@@ -47,6 +43,24 @@ func (s *Scene) AddSceneObjectToTheScene(sceneObject *SceneObject) error {
 	)
 
 	return nil
+}
+func (s *Scene) DeleteSceneObject(sceneObjectName string) error {
+
+	if s == nil {
+		return errors.New("Scene is nil")
+	}
+
+	for index, object := range s.Objects {
+		if object.Name == sceneObjectName {
+			s.Objects = append(s.Objects[:index], s.Objects[index+1:]...,
+			)
+			return nil
+
+		}
+	}
+
+	return nil
+
 }
 
 func (s *Scene) HasObject(name string) bool {
