@@ -37,6 +37,7 @@ func Loop() {
 			logger.Error(err.Error())
 		}
 		isRendererInitialized = true
+
 		logger.Info("Renderer is initialized. Render in process...")
 	}
 

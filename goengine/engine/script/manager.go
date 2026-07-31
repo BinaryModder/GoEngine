@@ -142,6 +142,7 @@ func (m *Manager) Update(dt float32) {
 	for _, inst := range m.instances {
 		inst.updateFn.Call(nil)
 	}
+
 }
 
 func (m *Manager) Destroy() {

@@ -5,7 +5,7 @@ import (
 	editor_ui "goengine/editor/ui"
 	"goengine/engine/logger"
 	hub_ui "goengine/hub/ui"
-	runtime_ui "goengine/runtime/ui"
+	"goengine/runtime"
 	"log"
 )
 
@@ -49,7 +49,7 @@ func main() {
 		editor_ui.Run(ProjectPath)
 	}
 	if RunMode {
-		runtime_ui.Run(ProjectPath)
+		runtime.Run(ProjectPath)
 	}
 	if !EditorMode && !RunMode {
 		hub_ui.Run()

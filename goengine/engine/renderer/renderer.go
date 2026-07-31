@@ -14,10 +14,20 @@ import (
 )
 
 type Renderer struct {
+
+	//Path
+	ProjectPath string
+
 	FrameBuffer     *FrameBuffer
 	ViewportTexture uint32
-	ProjectPath     string
-	UseSceneCamera  bool
+
+	//Mode
+	RuntimeRenderMode bool
+	UseSceneCamera    bool
+
+	//Window
+	WindowWidth  int
+	WindowHeight int
 }
 
 var State Renderer
@@ -29,8 +39,16 @@ var texLoc, useTexLoc int32
 
 var Scene *scene.Scene
 
+func SetWinSize(w int, h int) {
+	State.WindowWidth = w
+	State.WindowHeight = h
+
+}
 func SetUseSceneCamera(use bool) {
 	State.UseSceneCamera = use
+}
+func SetRuntimeRendererMode(use bool) {
+	State.RuntimeRenderMode = use
 }
 
 func findSceneCamera() *scene.SceneObject {
@@ -87,7 +105,7 @@ func Render(CurState state.State) {
 		State.ProjectPath = CurState.GetProjectPath()
 	}
 
-	if State.FrameBuffer == nil {
+	if !State.RuntimeRenderMode && State.FrameBuffer == nil {
 		return
 	}
 
@@ -103,8 +121,24 @@ func Render(CurState state.State) {
 	//binding scene
 	Scene = CurState.GetProjectScene()
 
-	gl.BindFramebuffer(gl.FRAMEBUFFER, State.FrameBuffer.ID)
-	gl.Viewport(0, 0, State.FrameBuffer.Width, State.FrameBuffer.Height)
+	var width, height int32
+
+	if State.RuntimeRenderMode {
+
+		gl.BindFramebuffer(gl.FRAMEBUFFER, 0)
+
+		width = int32(State.WindowWidth)
+		height = int32(State.WindowHeight)
+
+	} else {
+
+		gl.BindFramebuffer(gl.FRAMEBUFFER, State.FrameBuffer.ID)
+
+		width = State.FrameBuffer.Width
+		height = State.FrameBuffer.Height
+	}
+
+	gl.Viewport(0, 0, width, height)
 
 	gl.Enable(gl.DEPTH_TEST)
 	gl.Enable(gl.BLEND)
@@ -125,6 +159,7 @@ func Render(CurState state.State) {
 			view = sceneCameraViewMatrix(cam)
 			fov = getFieldOfView(cam)
 		} else {
+			EditorCam.Update()
 			view = EditorCam.GetViewMatrix()
 		}
 	} else {
@@ -132,7 +167,7 @@ func Render(CurState state.State) {
 		view = EditorCam.GetViewMatrix()
 	}
 
-	aspectRatio := float32(State.FrameBuffer.Width) / float32(State.FrameBuffer.Height)
+	aspectRatio := float32(width) / float32(height)
 	projection := mgl32.Perspective(mgl32.DegToRad(fov), aspectRatio, 0.1, 100.0)
 
 	projLoc := gl.GetUniformLocation(gridProgram, gl.Str("projection\x00"))

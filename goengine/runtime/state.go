@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"fmt"
+	"github.com/go-gl/glfw/v3.3/glfw"
 	"goengine/engine/logger"
 	"goengine/io/loader"
 	"goengine/project"
@@ -18,6 +19,17 @@ type RuntimeState struct {
 	//Settings
 	ShowConsole bool
 }
+
+type WindowState struct {
+	Window *glfw.Window
+
+	Width  int
+	Height int
+
+	Running bool
+}
+
+var Window = &WindowState{}
 
 func (s *RuntimeState) Init() error {
 

@@ -34,7 +34,7 @@ func Viewport() giu.Widget {
 				if renderer.State.FrameBuffer.Width != newW || renderer.State.FrameBuffer.Height != newH {
 
 					renderer.State.FrameBuffer.Resize(newW, newH)
-
+					renderer.SetWinSize(layout.ViewportWidth, layout.ViewportHeight)
 					gl.Viewport(0, 0, newW, newH)
 				}
 
