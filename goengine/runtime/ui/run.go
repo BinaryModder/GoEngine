@@ -3,13 +3,13 @@ package ui
 import (
 	"fmt"
 	"github.com/AllenDang/giu"
+	"goengine/engine/logger"
 	"goengine/runtime"
-	"log"
 )
 
 func Run(ProjectPath string) {
 	if ProjectPath == "" {
-		log.Fatal(
+		logger.Error(
 			"Project path is empty",
 		)
 	}
@@ -17,7 +17,7 @@ func Run(ProjectPath string) {
 	runtime.State.ProjectPath = ProjectPath
 
 	if err := runtime.State.Init(); err != nil {
-		log.Fatal(err)
+		logger.Error(err.Error())
 	}
 
 	window := giu.NewMasterWindow(
@@ -30,6 +30,7 @@ func Run(ProjectPath string) {
 		1080,
 		0,
 	)
+	logger.Info("Runtime started")
 	window.Run(
 		Loop,
 	)

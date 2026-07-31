@@ -10,7 +10,7 @@ import (
 func Viewport() giu.Widget {
 	return giu.Child().
 		Border(false).
-		Size(-1, ViewportHeight).Flags(
+		Size(-1, -1).Flags(
 		giu.WindowFlagsNoScrollbar |
 			giu.WindowFlagsNoScrollWithMouse).
 		Layout(

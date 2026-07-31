@@ -2,44 +2,66 @@ package ui
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/AllenDang/cimgui-go/imgui"
 	"github.com/AllenDang/giu"
-	"goengine/engine/console"
+	"goengine/engine/logger"
 	"goengine/engine/platform"
 	"goengine/engine/renderer"
+	enginescript "goengine/engine/script"
 	"goengine/runtime"
 	"goengine/ui/scale"
 )
 
 var (
-	isFontScalingInitialized bool
-	isRendererInitialized    bool
-	isSizesConfigured        bool
-	isPlatformInitialized    bool
+	isFontScalingInitialized   bool
+	isRendererInitialized      bool
+	isSizesConfigured          bool
+	isPlatformInitialized      bool
+	isScriptManagerInitialized bool
+	lastFrameTime              time.Time
 )
 
 func Loop() {
 
 	if !isFontScalingInitialized {
 		scale.SetFontScale()
-
 		isFontScalingInitialized = true
-
 	}
 
 	if !isRendererInitialized {
-		if err := renderer.Init(int32(ViewportWeight), int32(ViewportHeight)); err != nil {
-			console.State.Error(fmt.Sprintf("Failed to initialize renderer : %v", err))
+		if err := renderer.Init(int32(1920), int32(1080)); err != nil {
+			logger.Error(fmt.Sprintf("Failed to initialize renderer : %v", err))
 		}
 		isRendererInitialized = true
-		console.State.Info("Renderer Succesfuly Initialized")
-
+		logger.Info("Renderer Succesfuly Initialized")
 	}
+
 	if !isPlatformInitialized {
 		platform.Init()
 		isPlatformInitialized = true
-		console.State.Info("Platform Succesfuly Initialized")
+		logger.Info("Platform Succesfuly Initialized")
+	}
 
+	if !isScriptManagerInitialized {
+		enginescript.State.Init(runtime.State.ProjectPath)
+		enginescript.State.LoadAndStartAll(runtime.State.CurrentScene)
+		isScriptManagerInitialized = true
+		lastFrameTime = time.Now()
+		logger.Info("Script Manager Succesfuly Initialized")
+	}
+
+	now := time.Now()
+	dt := float32(now.Sub(lastFrameTime).Seconds())
+	lastFrameTime = now
+
+	if dt > 0.1 {
+		dt = 0.1
+	}
+
+	if dt > 0 && enginescript.State.HasScripts() {
+		enginescript.State.Update(dt)
 	}
 
 	renderer.Render(&runtime.State)
@@ -53,7 +75,6 @@ func Loop() {
 		Layout(
 			Viewport(),
 			giu.Separator(),
-			Console(),
 		)
-
+	Console()
 }

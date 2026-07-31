@@ -16,10 +16,8 @@ var (
 	isRendererInitialized bool
 )
 
-// The centre of Editor Interface
 func Loop() {
 
-	//Loading textures
 	if !isTextureLoaded {
 		if err := loader.LoadTextures(); err != nil {
 			logger.Error(err.Error())
@@ -28,37 +26,31 @@ func Loop() {
 		logger.Info("Textures are loaded")
 	}
 
-	//Loading font
 	if !isFontScaled {
 		scale.SetFontScale()
 		isFontScaled = true
 		logger.Info("Font scale is ready")
-
 	}
-	//Render Initializing
+
 	if !isRendererInitialized {
 		if err := renderer.Init(int32(layout.ViewportWidth), int32(layout.ViewportHeight)); err != nil {
 			logger.Error(err.Error())
 		}
 		isRendererInitialized = true
-
 		logger.Info("Renderer is initialized. Render in process...")
-
 	}
-	renderer.Render(&editor.State) // Render with Editor mode
-	//Connecting all widgets
+
+	renderer.Render(&editor.State)
 	giu.SingleWindow().Layout(
 		MenuBar(),
 		giu.Separator(),
 		giu.Row(
-
 			Hierarchy(),
 			Viewport(),
 			Inspector(),
 		),
 		giu.Separator(),
 		Project(),
-
 		CreateMaterialWindow(),
 		LoadMaterialWindow(),
 	)

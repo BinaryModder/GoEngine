@@ -38,7 +38,8 @@ Unlike many engines that rely on C++, C#, or scripting languages for their core,
 * **Rendering:** [OpenGL 4.1](https://www.opengl.org/)
 * **Math:** [mathgl](https://github.com/go-gl/mathgl)
 * **Windowing:** [GLFW](https://github.com/go-gl/glfw)
-* **Logger:** [Zap](https://github.com/uber-go/zap)---
+* **Logger:** [Zap](https://github.com/uber-go/zap)
+* **Interpreter** [Yaegi](https://github.com/traefik/yaegi.git)
 
 ## Project Structure
 

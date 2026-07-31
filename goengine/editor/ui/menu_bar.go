@@ -5,6 +5,7 @@ import (
 	"goengine/app"
 	"goengine/editor"
 	"goengine/editor/functions"
+	"goengine/engine/logger"
 	"goengine/ui/layout"
 )
 
@@ -17,6 +18,7 @@ func MenuBar() giu.Widget {
 		giu.Button("Save").OnClick(
 			func() {
 				if err := functions.SaveMenuBar(editor.State.CurrentScene, editor.State.ProjectPath); err != nil {
+					logger.Error(err.Error())
 					return
 				}
 			},
@@ -28,6 +30,7 @@ func MenuBar() giu.Widget {
 		giu.Button("Assets").OnClick(
 			func() {
 				if err := functions.AssetMenuBar(editor.State.DefaultAssetsFolder); err != nil {
+					logger.Error(err.Error())
 					return
 				}
 			},
@@ -37,8 +40,10 @@ func MenuBar() giu.Widget {
 			OnChange(func() {
 
 				if err := functions.SceneObjectMenuBar(editor.State.CurrentScene, &selectedObjectIndex); err != nil {
+					logger.Error(err.Error())
 					return
 				}
+				logger.Info("New object created")
 
 			}),
 
@@ -48,11 +53,9 @@ func MenuBar() giu.Widget {
 				switch selectedMaterialIndex {
 				case 0:
 					editor.State.ShowCreateMaterial = true
-
 				case 1:
 
 					editor.State.ShowLoadMaterial = true
-
 				}
 
 			}),
@@ -67,8 +70,10 @@ func MenuBar() giu.Widget {
 		giu.Button("Run").OnClick(
 			func() {
 				if err := app.Runtime(editor.State.ProjectPath); err != nil {
+					logger.Error(err.Error())
 					return
 				}
+				logger.Info("Runtime starting...")
 			},
 		).Size(layout.RunSizeWeight, layout.RunSizeHeight),
 	)

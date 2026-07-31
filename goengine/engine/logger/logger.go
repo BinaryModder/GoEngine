@@ -60,3 +60,12 @@ func Error(msg string) {
 			Text:  msg,
 		})
 }
+func Message(msg string) {
+	Log.Info(msg)
+
+	Entries = append(Entries,
+		Entry{
+			Level: "MESSAGE",
+			Text:  msg,
+		})
+}

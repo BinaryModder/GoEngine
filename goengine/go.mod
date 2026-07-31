@@ -19,6 +19,7 @@ require (
 	github.com/napsy/go-css v1.0.0 // indirect
 	github.com/pkg/browser v0.0.0-20210911075715-681adbf594b8 // indirect
 	github.com/sahilm/fuzzy v0.1.1 // indirect
+	github.com/traefik/yaegi v0.16.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.28.0 // indirect
 	golang.design/x/hotkey v0.4.1 // indirect
