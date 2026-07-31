@@ -5,6 +5,7 @@ import (
 	"github.com/AllenDang/giu"
 	"goengine/editor"
 	"goengine/editor/functions"
+	"goengine/engine/logger"
 	"goengine/scene"
 	"goengine/ui/layout"
 )
@@ -102,10 +103,13 @@ func Inspector() giu.Widget {
 					contains := editor.State.CurrentScene.HasObject(selectedObjectName)
 
 					if contains {
+						logger.Warning(fmt.Sprintf("Object with this name (%s) already exists", selectedObjectName))
 						return
 					}
 					obj.Name = selectedObjectName
 					editor.State.SelectedObject = selectedObjectName
+
+					logger.Info(fmt.Sprintf("The object has new name: %s", obj.Name))
 				}),
 		),
 		giu.Label(fmt.Sprintf("Type: %s", obj.Type)),
@@ -156,6 +160,8 @@ func Inspector() giu.Widget {
 				OnChange(func() {
 					if int(selectedMaterialIndex) < len(editor.State.Materials) {
 						obj.Material = &editor.State.Materials[selectedMaterialIndex]
+
+						logger.Info(fmt.Sprintf("Object %s has %s material", obj.Name, editor.State.Materials[selectedMaterialIndex].Name))
 					}
 				}),
 		),
@@ -227,9 +233,12 @@ func Inspector() giu.Widget {
 			Size(-1, 35).
 			OnClick(func() {
 				if err := editor.State.CurrentScene.DeleteSceneObject(editor.State.SelectedObject); err != nil {
+					logger.Error(err.Error())
 					return
 				}
 				editor.State.SelectedObject = ""
+
+				logger.Info("Object was deleted")
 			}),
 	)
 

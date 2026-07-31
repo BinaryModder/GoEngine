@@ -30,6 +30,8 @@ func Run(ProjectPath string) error {
 	window.Run(
 		Loop,
 	)
+
+	logger.Info("Editor started")
 	return nil
 
 }

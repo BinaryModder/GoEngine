@@ -23,6 +23,8 @@ func Run() error {
 	window.Run(
 		Loop,
 	)
+
+	logger.Info("Hub started")
 	return nil
 
 }

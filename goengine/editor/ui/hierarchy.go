@@ -1,8 +1,10 @@
 package ui
 
 import (
+	"fmt"
 	"github.com/AllenDang/giu"
 	"goengine/editor"
+	"goengine/engine/logger"
 	"goengine/ui/layout"
 )
 
@@ -25,6 +27,8 @@ func Hierarchy() giu.Widget {
 			giu.Label("No Scene Loaded"),
 		)
 
+		logger.Error("Scene not found")
+
 	} else {
 
 		for _, object := range editor.State.CurrentScene.Objects {
@@ -41,6 +45,7 @@ func Hierarchy() giu.Widget {
 					Selected(isSelected).
 					OnClick(func() {
 						editor.State.SelectedObject = obj.Name
+						logger.Info(fmt.Sprintf("Selected object: %s", obj.Name))
 					}),
 			)
 		}
