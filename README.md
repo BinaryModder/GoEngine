@@ -33,13 +33,12 @@ Unlike many engines that rely on C++, C#, or scripting languages for their core,
 
 ## Technology Stack
 
-* **Language:** Go (Golang)
-* **GUI:** giu (Dear ImGui)
-* **Rendering:** OpenGL 4.1
-* **Math:** mathgl
-* **Windowing:** GLFW
-
----
+* **Language:** [Go (Golang)](https://github.com/golang/go)
+* **GUI:** [giu (Dear ImGui)](https://github.com/AllenDang/giu)
+* **Rendering:** [OpenGL 4.1](https://www.opengl.org/)
+* **Math:** [mathgl](https://github.com/go-gl/mathgl)
+* **Windowing:** [GLFW](https://github.com/go-gl/glfw)
+* **Logger:** [Zap](https://github.com/uber-go/zap)---
 
 ## Project Structure
 
@@ -57,6 +56,7 @@ goengine/
 │   ├── renderer/    OpenGL 4.1: framebuffers, camera, shaders, primitives, textures
 │   ├── platform/    OS detection (Windows/macOS/Linux)
 │   └── console/     in-engine log console
+    └── logger/      zap logger
 ├── hub/           Project hub/launcher: browse recent projects, create new ones,
 │   └── ui/          paginated project cards, settings navigation
 ├── io/            I/O layer:
