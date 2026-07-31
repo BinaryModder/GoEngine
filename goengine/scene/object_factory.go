@@ -42,7 +42,7 @@ func NewPyramid(name string, color [3]float32) SceneObject {
 func NewCamera(name string) SceneObject {
 	t := DefaultTransform()
 	t.Position = [3]float32{0, 5, 10}
-	t.Rotation = [3]float32{-25, 0, 0}
+	t.Rotation = [3]float32{-25, -90, 0}
 
 	return SceneObject{
 		Name:      name,

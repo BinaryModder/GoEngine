@@ -6,6 +6,7 @@ import (
 
 	"github.com/AllenDang/cimgui-go/imgui"
 	"github.com/AllenDang/giu"
+	"goengine/engine/console"
 	"goengine/engine/logger"
 	"goengine/engine/platform"
 	"goengine/engine/renderer"
@@ -17,7 +18,6 @@ import (
 var (
 	isFontScalingInitialized   bool
 	isRendererInitialized      bool
-	isSizesConfigured          bool
 	isPlatformInitialized      bool
 	isScriptManagerInitialized bool
 	lastFrameTime              time.Time
@@ -31,17 +31,18 @@ func Loop() {
 	}
 
 	if !isRendererInitialized {
-		if err := renderer.Init(int32(1920), int32(1080)); err != nil {
-			logger.Error(fmt.Sprintf("Failed to initialize renderer : %v", err))
+		if err := renderer.Init(1920, 1080); err != nil {
+			console.State.Error(fmt.Sprintf("Failed to initialize renderer : %v", err))
 		}
+		renderer.SetUseSceneCamera(true)
 		isRendererInitialized = true
-		logger.Info("Renderer Succesfuly Initialized")
+		console.State.Info("Renderer Succesfuly Initialized")
 	}
 
 	if !isPlatformInitialized {
 		platform.Init()
 		isPlatformInitialized = true
-		logger.Info("Platform Succesfuly Initialized")
+		console.State.Info("Platform Succesfuly Initialized")
 	}
 
 	if !isScriptManagerInitialized {

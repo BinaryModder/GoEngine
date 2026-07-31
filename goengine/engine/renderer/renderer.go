@@ -1,6 +1,7 @@
 package renderer
 
 import (
+	"math"
 	"os"
 	"path/filepath"
 
@@ -16,6 +17,7 @@ type Renderer struct {
 	FrameBuffer     *FrameBuffer
 	ViewportTexture uint32
 	ProjectPath     string
+	UseSceneCamera  bool
 }
 
 var State Renderer
@@ -26,6 +28,54 @@ var isTextureLocsCached bool
 var texLoc, useTexLoc int32
 
 var Scene *scene.Scene
+
+func SetUseSceneCamera(use bool) {
+	State.UseSceneCamera = use
+}
+
+func findSceneCamera() *scene.SceneObject {
+	if Scene == nil {
+		return nil
+	}
+	for i := range Scene.Objects {
+		if Scene.Objects[i].Type == "Camera" {
+			return &Scene.Objects[i]
+
+		}
+	}
+	logger.Warning("Camera not found")
+
+	return nil
+}
+
+func sceneCameraViewMatrix(cam *scene.SceneObject) mgl32.Mat4 {
+	pos := mgl32.Vec3{cam.Transform.Position[0], cam.Transform.Position[1], cam.Transform.Position[2]}
+
+	yaw := float64(cam.Transform.Rotation[1])
+	pitch := float64(cam.Transform.Rotation[0])
+
+	radYaw := yaw * math.Pi / 180.0
+	radPitch := pitch * math.Pi / 180.0
+
+	front := mgl32.Vec3{
+		float32(math.Cos(radYaw) * math.Cos(radPitch)),
+		float32(math.Sin(radPitch)),
+		float32(math.Sin(radYaw) * math.Cos(radPitch)),
+	}.Normalize()
+
+	up := mgl32.Vec3{0, 1, 0}
+	return mgl32.LookAtV(pos, pos.Add(front), up)
+}
+
+func getFieldOfView(cam *scene.SceneObject) float32 {
+	if cam == nil {
+		return 60.0
+	}
+	if fov, ok := cam.Parameters["FOV"].(float64); ok {
+		return float32(fov)
+	}
+	return 60.0
+}
 
 func Render(CurState state.State) {
 
@@ -66,12 +116,24 @@ func Render(CurState state.State) {
 	gl.UseProgram(gridProgram)
 
 	//camera
-	EditorCam.Update()
+	var view mgl32.Mat4
+	var fov float32 = 45.0
+
+	if State.UseSceneCamera {
+		cam := findSceneCamera()
+		if cam != nil {
+			view = sceneCameraViewMatrix(cam)
+			fov = getFieldOfView(cam)
+		} else {
+			view = EditorCam.GetViewMatrix()
+		}
+	} else {
+		EditorCam.Update()
+		view = EditorCam.GetViewMatrix()
+	}
 
 	aspectRatio := float32(State.FrameBuffer.Width) / float32(State.FrameBuffer.Height)
-	projection := mgl32.Perspective(mgl32.DegToRad(45.0), aspectRatio, 0.1, 100.0)
-
-	view := EditorCam.GetViewMatrix()
+	projection := mgl32.Perspective(mgl32.DegToRad(fov), aspectRatio, 0.1, 100.0)
 
 	projLoc := gl.GetUniformLocation(gridProgram, gl.Str("projection\x00"))
 	viewLoc := gl.GetUniformLocation(gridProgram, gl.Str("view\x00"))
@@ -144,6 +206,20 @@ func Render(CurState state.State) {
 
 			}
 		}
+
+		if !State.UseSceneCamera {
+			for i := range Scene.Objects {
+				obj := &Scene.Objects[i]
+				if obj.Type == "Camera" {
+					camModel := getCameraModelMatrix(obj)
+					gl.UniformMatrix4fv(modelLoc, 1, false, &camModel[0])
+					gl.Uniform3f(colorLoc, 0.2, 0.8, 0.2)
+					gl.Uniform1i(useTexLoc, 0)
+					gl.BindVertexArray(Pyramid.VAO)
+					gl.DrawArrays(gl.TRIANGLES, 0, Pyramid.VertexCount)
+				}
+			}
+		}
 	}
 
 	gl.BindFramebuffer(gl.FRAMEBUFFER, 0)
@@ -156,6 +232,38 @@ func getModelMatrix(t scene.Transform) mgl32.Mat4 {
 	model = model.Mul4(mgl32.HomogRotate3DY(mgl32.DegToRad(t.Rotation[1])))
 	model = model.Mul4(mgl32.HomogRotate3DZ(mgl32.DegToRad(t.Rotation[2])))
 	model = model.Mul4(mgl32.Scale3D(t.Scale[0], t.Scale[1], t.Scale[2]))
+	return model
+}
+
+func getCameraModelMatrix(cam *scene.SceneObject) mgl32.Mat4 {
+	yawRad := float64(cam.Transform.Rotation[1]) * math.Pi / 180.0
+	pitchRad := float64(cam.Transform.Rotation[0]) * math.Pi / 180.0
+
+	front := mgl32.Vec3{
+		float32(math.Cos(yawRad) * math.Cos(pitchRad)),
+		float32(math.Sin(pitchRad)),
+		float32(math.Sin(yawRad) * math.Cos(pitchRad)),
+	}.Normalize()
+
+	worldUp := mgl32.Vec3{0, 1, 0}
+	right := worldUp.Cross(front).Normalize()
+	camUp := front.Cross(right)
+
+	rotation := mgl32.Mat4FromCols(
+		mgl32.Vec4{right[0], right[1], right[2], 0},
+		mgl32.Vec4{front[0], front[1], front[2], 0},
+		mgl32.Vec4{camUp[0], camUp[1], camUp[2], 0},
+		mgl32.Vec4{0, 0, 0, 1},
+	)
+
+	model := mgl32.Ident4()
+	model = model.Mul4(mgl32.Translate3D(
+		cam.Transform.Position[0],
+		cam.Transform.Position[1],
+		cam.Transform.Position[2],
+	))
+	model = model.Mul4(rotation)
+	model = model.Mul4(mgl32.Scale3D(0.3, 0.3, 0.3))
 	return model
 }
 

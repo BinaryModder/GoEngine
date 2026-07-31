@@ -2,6 +2,8 @@ package ui
 
 import (
 	"fmt"
+	"sort"
+
 	"github.com/AllenDang/giu"
 	"goengine/editor"
 	"goengine/editor/functions"
@@ -170,25 +172,30 @@ func Inspector() giu.Widget {
 	if len(obj.Parameters) > 0 {
 		widgets = append(widgets, giu.Label("Parameters"))
 
-		for key, val := range obj.Parameters {
+		keys := make([]string, 0, len(obj.Parameters))
+		for k := range obj.Parameters {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+
+		for _, key := range keys {
+			val := obj.Parameters[key]
 			switch v := val.(type) {
 			case string:
 				widgets = append(widgets, giu.Label(fmt.Sprintf("%s: %s", key, v)))
 
 			case float64:
 				val32 := float32(v)
-				sliderID := fmt.Sprintf("%s##param_%s", key, key)
 				widgets = append(widgets,
-					giu.SliderFloat(&val32, 0.1, 200.0).Label(sliderID).OnChange(func() {
+					giu.SliderFloat(&val32, 0.1, 200.0).Label(key).OnChange(func() {
 						obj.Parameters[key] = float64(val32)
 					}),
 				)
 
 			case bool:
 				bVal := v
-				checkboxID := fmt.Sprintf("%s##param_%s", key, key)
 				widgets = append(widgets,
-					giu.Checkbox(checkboxID, &bVal).OnChange(func() {
+					giu.Checkbox(key, &bVal).OnChange(func() {
 						obj.Parameters[key] = bVal
 					}),
 				)
