@@ -61,7 +61,6 @@ func findSceneCamera() *scene.SceneObject {
 
 		}
 	}
-	logger.Warning("Camera not found")
 
 	return nil
 }
@@ -159,7 +158,9 @@ func Render(CurState state.State) {
 			view = sceneCameraViewMatrix(cam)
 			fov = getFieldOfView(cam)
 		} else {
-			EditorCam.Update()
+			if !State.RuntimeRenderMode {
+				EditorCam.Update()
+			}
 			view = EditorCam.GetViewMatrix()
 		}
 	} else {
