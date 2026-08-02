@@ -55,7 +55,6 @@ func Destroy() {}
 
 ## Allowed bridge methods
 
-
  * **Self** - self object
 
  * **Move** (func(dx, dy , dz float64)) - moving object using increment
@@ -74,7 +73,6 @@ func Destroy() {}
 
  * **DeltaTime** - float64
  * **Write** - writing to the console
-
 
 ## Technology Stack
 
@@ -157,6 +155,14 @@ Run the editor:
 
 ```bash
 go run ./cmd/main.go -editor -project <ProjectPath>
+```
+
+---
+
+Run the runtime:
+
+```bash
+go run ./cmd/main.go -runtime -project <ProjectPath>
 ```
 
 ---
