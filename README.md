@@ -31,6 +31,51 @@ Unlike many engines that rely on C++, C#, or scripting languages for their core,
 
 ---
 
+
+## Script Example
+
+```go
+package main
+
+import (
+	"goengine/bridge/goengine"
+)
+
+var speed float64 = 0.2
+
+func Start() {}
+
+func Update() {
+	bridge.Rotate(RotateSpeed*bridge.DeltaTime(), RotateSpeed*bridge.DeltaTime(), RotateSpeed*bridge.DeltaTime())
+    bridge.Move(0, MoveSpeed*bridge.DeltaTime(), 0)
+}
+
+func Destroy() {}
+```
+
+## Allowed bridge methods
+
+
+ * **Self** - self object
+
+ * **Move** (func(dx, dy , dz float64)) - moving object using increment
+ * **Rotate** (func(dx, dy, dz float64)) - rotating object using increment
+
+ * **SetPos** (func(dx , dy, dz float64)) - set object position
+ * **SetRot** (func(x, y, z float64)) - set object rotation
+ * **SetScale** (func(dx, dy, dz)) - set object scale
+
+ * **GetPosX** - float64
+ * **GetPosY** - float64
+ * **GetPosZ** - float64
+ * **GetRotX** - float64
+ * **GetRotY** - float64
+ * **GetRotZ** - float64
+
+ * **DeltaTime** - float64
+ * **Write** - writing to the console
+
+
 ## Technology Stack
 
 * **Language:** [Go (Golang)](https://github.com/golang/go)
