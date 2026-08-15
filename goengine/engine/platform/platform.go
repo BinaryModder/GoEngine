@@ -22,7 +22,7 @@ func Init() {
 		State.isLinux = true
 	case "windows":
 		State.isWindows = true
-	case "macos":
+	case "darwin":
 		State.isMacOS = true
 	}
 }

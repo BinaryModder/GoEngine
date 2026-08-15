@@ -8,7 +8,6 @@ import (
 	"goengine/project"
 	"goengine/scene"
 	"goengine/settings"
-	"goengine/ui/layout"
 )
 
 type EditorState struct {
@@ -47,10 +46,6 @@ func (s *EditorState) Init() error {
 	//Platform information initializing
 	platform.Init()
 	logger.Info(fmt.Sprintf("Platform is initialized: %s", platform.State.OS))
-
-	//Configuring sizes
-	layout.ConfigureSize()
-	logger.Info("Sizes are configured")
 
 	// Scene initializing
 	scene, err := loader.LoadScene(State.ProjectPath)

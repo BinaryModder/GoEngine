@@ -19,8 +19,12 @@ func Runtime(path string) error {
 		"-project",
 		path,
 	)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
-	cmd.Start()
+	if err := cmd.Start(); err != nil {
+		return err
+	}
 
 	return nil
 }

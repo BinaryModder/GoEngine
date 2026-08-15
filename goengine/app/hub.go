@@ -22,7 +22,11 @@ func Hub() {
 
 		exePath,
 	)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 
-	cmd.Start()
+	if err := cmd.Start(); err != nil {
+		fmt.Println(err)
+	}
 
 }

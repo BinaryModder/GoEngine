@@ -17,6 +17,7 @@ var (
 )
 
 func Loop() {
+	processBuildResult()
 
 	if !isTextureLoaded {
 		if err := loader.LoadTextures(); err != nil {

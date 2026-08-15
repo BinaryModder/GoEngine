@@ -1,9 +1,5 @@
 package layout
 
-import (
-	s "goengine/ui/scale"
-)
-
 const (
 	//interface components
 	HierarchyWidth = 250
@@ -27,21 +23,3 @@ const (
 	RunSizeWeight = 63.5
 	RunSizeHeight = 0
 )
-
-var (
-	ToMiddleDummyWeight = float32(0)
-	ToMiddleDummyHeight = float32(0)
-)
-
-func ConfigureSize() {
-	switch {
-	case s.CurrentScaling == s.ScalingOther:
-
-		ToMiddleDummyWeight = 330.5
-		ToMiddleDummyHeight = 0
-
-	default:
-		ToMiddleDummyWeight = 230
-		ToMiddleDummyHeight = 0
-	}
-}

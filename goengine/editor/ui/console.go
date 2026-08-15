@@ -21,7 +21,7 @@ func Console() {
 
 	imgui.BeginV("Console", &open, 0)
 
-	for _, e := range logger.Entries {
+	for _, e := range logger.GetEntries() {
 
 		switch e.Level {
 		case "INFO":
