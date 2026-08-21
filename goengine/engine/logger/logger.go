@@ -1,11 +1,10 @@
 package logger
 
 import (
-	"os"
-	"sync"
-
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"os"
+	"sync"
 )
 
 type Entry struct {
@@ -20,7 +19,9 @@ var logFile *os.File
 
 func Init() error {
 	encoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
-	file, err := os.OpenFile("goengine.log", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
+
+	file, err := os.OpenFile(
+		"../goengine.log", os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
