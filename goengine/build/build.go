@@ -55,6 +55,9 @@ func Project(options Options) (*Result, error) {
 	}
 
 	buildPath := filepath.Join(outputPath, name)
+	if pathContains(buildPath, projectPath) {
+		buildPath += "-build"
+	}
 	if err := validateBuildPaths(projectPath, outputPath, buildPath); err != nil {
 		return nil, err
 	}
@@ -203,11 +206,11 @@ func buildPlayer(moduleRoot, executablePath string) error {
 		"-s -w",
 		"-o",
 		executablePath,
-		"./cmd/player",
+		"./cmd/build",
 	)
 	cmd.Dir = moduleRoot
 	logger.Info("Build command directory: " + moduleRoot)
-	logger.Info("Build command: go build -trimpath -ldflags \"-s -w\" -o " + executablePath + " ./cmd/player")
+	logger.Info("Build command: go build -trimpath -ldflags \"-s -w\" -o " + executablePath + " ./cmd/build")
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
